@@ -17,7 +17,7 @@ typedef struct Entity entity;
 struct Element{
 	
 	char Name[64];
-	// Pour l'ID : 0=>eau / 1=>feu / 2=>air etc... (à completer)
+	// Pour l'ID : 0=>eau / 1=>feu / 2=>air / 3=>terre // 4=>air / 5=>glace / 6=>nature / 7=>foudre / 8=>lave / 9=>sable
 	int ID;
 	int ModifAtkPhy;
 	int ModifAtkMag;
@@ -42,7 +42,17 @@ int main(){
 	
 	entity loup = {"Loup de ", 4,1,3,2};
 	
+	element eau = {"Eau",0,-1,1,1,0,"Soigne 1PV par tour aux autres creatures sous votre controle"};
+	element feu = {"Feu",1,2,0,-1,0,"Inflige deux tours de brulure (-1PV par tour) pour toute attaque physique effectuée"};
+	element air = {"Air",2,-1,0,1,1,"Subit 1 dégat magique de moins par attaque magique subie"};
 	element terre = {"Terre",3,0,-1,2,0,"Subit 1 dégat physique de moins par attaque physique subie"};
+	
+	element fumee = {"Fumee",4,0,1,1,-1,"Inflige 1 degat a tous les adversaires par tour"};
+	element glace = {"Glace",5,0,1,-1,1,"Reduit l'attaque de 1 point pendant 2 tours a celui qui subit une attaque de glace"};
+	element nature = {"Nature",6,-1,0,1,1,"Est soigné de 1PV par tour et reduit les degats subits de 1 a chaque attaque"};
+	element foudre = {"Foudre",7,0,2,0,-1,"Fait un degat magique de plus et un degat supplementaire pour chaque attaque foudre deja lancee ce tour"};
+	element lave = {"Lave",8,1,0,1,-1,"Inflige un degat supplementaire de contre-attaque"};
+	element sable = {"Sable",9,0,-1,1,1,"Divise par deux les degats de contre-attaque recus"};
 	
 	printf("%s",loup.Name);
 	printf("%s \n",terre.Name);
