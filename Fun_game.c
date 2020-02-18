@@ -41,15 +41,15 @@ typedef struct Card card;
 int main(){
 
 	entity Loup = {"Loup d", 4,4,3,3};                                    //balance
-	entity CrabeRoyal = {"CrabeRoyal d", 7, 4, 3, 0};                     //HP
+	entity CrabeRoyal = {"Crabe Royal d", 7, 4, 3, 0};                    //HP
 	entity DragonDeKomodo = {"Drakodo d", 4, 4, 6, 0};                    //attack + HP (phy + spe)
-	entity AreigneeCracheuse = {"Areignee Cracheuse d", 2, 4, 2, 6};      //attack spe
-	entity KrocodilAffamé = {"Krocodil Affame d", 5, 2, 5, 2};            //attack + HP
+	entity AraigneeCracheuse = {"Araignee Cracheuse d", 2, 4, 2, 6};      //attack spe
+	entity CrocodileAffamé = {"Crocodile d", 5, 2, 5, 2};                   //attack + HP
 	entity ChefAlpaga = {"Chef Alpaga d", 5, 5, 2, 4};                    //HP (phy + spe) + attack spe
-	entity GrenouilleDeDard = {"GreDard d", 4, 7, 0, 3};                  //HP mag + attack spe
-    entity TortueSonor = {"Tortue Sonor d", 6, 2, 2, 6};                  //HP + attack spe
+	entity Grenouille = {"Crapaud d", 4, 7, 0, 3};                        //HP mag + attack spe
+    entity TortueSonore = {"Tortue Sonore d", 6, 2, 2, 6};                 //HP + attack spe
     entity BoucTemeraire = {"Bouc Temeraire d", 3, 3, 5, 5};              //attack (phy + spe)
-    entity aigle = {"Aigle d", 3, 4, 6, 2};                               //attack
+    entity Aigle = {"Aigle d", 3, 4, 6, 2};                               //attack
 
 
 
