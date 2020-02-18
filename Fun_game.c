@@ -40,27 +40,21 @@ typedef struct Card card;
 
 int main(){
 	
-	entity loup = {"Loup de ", 4,1,3,2};
+	entity loup = {"Loup d", 4,1,3,2};
 	
-	element eau = {"Eau",0,-1,1,1,0,"Soigne 1PV par tour aux autres creatures sous votre controle"};
-	element feu = {"Feu",1,2,0,-1,0,"Inflige deux tours de brulure (-1PV par tour) pour toute attaque physique effectuée"};
-	element air = {"Air",2,-1,0,1,1,"Subit 1 dégat magique de moins par attaque magique subie"};
-	element terre = {"Terre",3,0,-1,2,0,"Subit 1 dégat physique de moins par attaque physique subie"};
+	element eau = {"'Eau",0,-1,1,1,0,"Soigne 1PV par tour aux autres creatures sous votre controle"};
+	element feu = {"e Feu",1,2,0,-1,0,"Inflige deux tours de brulure (-1PV par tour) pour toute attaque physique effectuée"};
+	element air = {"e Air",2,-1,0,1,1,"Subit 1 dégat magique de moins par attaque magique subie"};
+	element terre = {"e Terre",3,0,-1,2,0,"Subit 1 dégat physique de moins par attaque physique subie"};
 	
-	element fumee = {"Fumee",4,0,1,1,-1,"Inflige 1 degat a tous les adversaires par tour"};
-	element glace = {"Glace",5,0,1,-1,1,"Reduit l'attaque de 1 point pendant 2 tours a celui qui subit une attaque de glace"};
-	element nature = {"Nature",6,-1,0,1,1,"Est soigné de 1PV par tour et reduit les degats subits de 1 a chaque attaque"};
-	element foudre = {"Foudre",7,0,2,0,-1,"Fait un degat magique de plus et un degat supplementaire pour chaque attaque foudre deja lancee ce tour"};
-	element lave = {"Lave",8,1,0,1,-1,"Inflige un degat supplementaire de contre-attaque"};
-	element sable = {"Sable",9,0,-1,1,1,"Divise par deux les degats de contre-attaque recus"};
+	element fumee = {"e Fumee",4,0,1,1,-1,"Inflige 1 degat a tous les adversaires par tour"};
+	element glace = {"e Glace",5,0,1,-1,1,"Reduit l'attaque de 1 point pendant 2 tours a celui qui subit une attaque de glace"};
+	element nature = {"e Nature",6,-1,0,1,1,"Est soigné de 1PV par tour et reduit les degats subits de 1 a chaque attaque"};
+	element foudre = {"e Foudre",7,0,2,0,-1,"Fait un degat magique de plus et un degat supplementaire pour chaque attaque foudre deja lancee ce tour"};
+	element lave = {"e Lave",8,1,0,1,-1,"Inflige un degat supplementaire de contre-attaque"};
+	element sable = {"e Sable",9,0,-1,1,1,"Divise par deux les degats de contre-attaque recus"};
 	
-	printf("%s",loup.Name);
-	printf("%s \n",terre.Name);
-	
-	card firstCard = {loup,terre};
-	
-	printf("\n%s",firstCard.Entity.Name);
-	printf("%s\n",firstCard.Element.Name);
+	card firstCard = {loup,eau};
 	
 	strcat(firstCard.Entity.Name, firstCard.Element.Name);
 	firstCard.Entity.AtkPhy += firstCard.Element.ModifAtkPhy;
