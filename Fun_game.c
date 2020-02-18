@@ -53,11 +53,11 @@ int main(){
     entity Elephant = {"Elefant d", 10, 0, 4, 0};                         //HP
     entity Jaguare = {"Jaguare d", 2, 6, 6, 2};                           //HP spe + attack
     entity SerpentCorosif = {"Serpent Corosif d", 0, 10, 0, 4};           //HP spe + attack spe
-    entity PlanteMarecageuse = {"Plante Marecargeuese d", 4, 4, 0, 6};              //attack spe
-    entity Scorpion = {"Scorpion d", 6, 2, 2, 4};
-    entity Phasme = {"Phasme d", 6, 6, 2, 2};
-    entity Buffle = {"Buffle d", 5, 2, 4, 2};
-    entity ManteReligieuse = {"Mante Religieuse d", 3, 4, 6, 2};
+    entity PlanteMarecageuse = {"Plante Marecargeuese d", 4, 4, 0, 6};    //attack spe
+    entity Scorpion = {"Scorpion d", 6, 2, 2, 4};                         //attack + attack spe
+    entity Phasme = {"Phasme d", 6, 6, 2, 2};                             // HP (shy + spe)
+    entity Buffle = {"Buffle d", 5, 2, 4, 2};                             //HP + attack
+    entity ManteReligieuse = {"Mante Religieuse d", 3, 4, 6, 2};          //attack
 
 
 	element terre = {"Terre",3,0,-1,2,0,"Subit 1 dégat physique de moins par attaque physique subie"};
