@@ -44,7 +44,7 @@ int main(){
 	entity CrabeRoyal = {"Crabe Royal d", 7, 4, 3, 0};                    //HP
 	entity DragonDeKomodo = {"Drakodo d", 4, 4, 6, 0};                    //attack + HP (phy + spe)
 	entity AraigneeCracheuse = {"Araignee Cracheuse d", 2, 4, 2, 6};      //attack spe
-	entity CrocodileAffamé = {"Crocodile d", 5, 2, 5, 2};                   //attack + HP
+	entity CrocodileAffame = {"Crocodile d", 5, 2, 5, 2};                   //attack + HP
 	entity ChefAlpaga = {"Chef Alpaga d", 5, 5, 2, 4};                    //HP (phy + spe) + attack spe
 	entity Grenouille = {"Crapaud d", 4, 7, 0, 3};                        //HP mag + attack spe
     entity TortueSonore = {"Tortue Sonore d", 6, 2, 2, 6};                 //HP + attack spe
