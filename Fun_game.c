@@ -125,19 +125,15 @@ int main(){
 	printf ("%s\n",deck1[12].Entity.Name);
 
     card deckAlea[20];
-    card A;
-	srand(time(NULL)); // initialisation de rand
-	for(int i = 0; i < 20; i ++){
-		//char AleaElement[30] = ElementNumber[rand()%4];
-        //char AleaEntity[30] = EntityNumber[rand()%18];
-        card X = {ElementNumber[rand()%4].Name, EntityNumber[rand()%18].Name};
-        deckAlea[i] = {X};
-        printf("%s", EntityNumber[rand()%18]);
 
+	for(int i = 0; i < 20; i++){
+        card X = {ElementNumber[rand()%4], EntityNumber[rand()%18]};
+        deckAlea[i] = X;
 	}
 
+	DeckDefinition(deckAlea);
 
-    printf("%s\n", ElementNumber[2].Name);
+        printf ("%s\n",ElementNumber[0].Name);
 
 
 
