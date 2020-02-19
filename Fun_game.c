@@ -61,8 +61,58 @@ void DeckDefinition (card deck[20]){
 
 
 
-void Draw (card deck[20], card hand[20], 
+void Draw (card deck[20], card hand[20], int cardsDrew[20]){
+	
+	int nRandom = 0;
+	int verif = 0;
+	int index = 0;
+	
+	while(verif == 0){
+		
+		nRandom = rand()%20;
+		verif = 1;
+		
+		for (int i = 0; i<20; i++){
+			
+			if(cardsDrew[i] == nRandom){verif = 0;}
+			
+		}
+		
+	}
+	
+	for (int i = 0; i<20; i++){
+		
+		if (hand[i].Element.ID == 10){
+			
+			index = i;
+			i = 22;
+			
+		}
+		
+	}
+	
+	hand[index] = deck[nRandom];
+	
+};
 
+
+void ShowHand(card hand[20]){
+	
+	printf("\n");
+	
+	for(int i = 0; i<20; i++){
+		
+		if (hand[i].Element.ID != 10){
+			
+			printf(" - %s  %d/%d/%d/%d\n",hand[i].Entity.Name,hand[i].Entity.Atk,hand[i].Entity.AtkSpe,hand[i].Entity.Life,hand[i].Entity.LifeSpe);
+			
+		}
+		
+	}
+	
+	printf("\n");
+	
+};
 
 
 
@@ -78,11 +128,25 @@ void Fight (card deckP[20], card deckA[20]){
 	element empty = {"Z",10,0,0,0,0,""};
 	entity Empty = {"z",0,0,0,0};
 	
+	// Les terrains des deux joueurs
 	card fieldA[3] ={Empty,empty, Empty,empty, Empty,empty};
 	card fieldP[3] ={Empty,empty, Empty,empty, Empty,empty};
 	
+	// Les mains des deux joueurs
 	card handP[20] = {Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty};
 	card handA[20] = {Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty};
+	
+	
+	Draw(deckA,handA,cardsDrewA);
+	Draw(deckA,handA,cardsDrewA);
+	Draw(deckA,handA,cardsDrewA);
+	
+	
+	Draw(deckP,handP,cardsDrewP);
+	Draw(deckP,handP,cardsDrewP);
+	Draw(deckP,handP,cardsDrewP);
+	
+	ShowHand(handP);
 	
 	
 };
@@ -154,7 +218,7 @@ int main(){
 
 
 
-
+	Fight (deck1,deck1);
 
 
 
