@@ -124,23 +124,21 @@ int main(){
 	//On peut ainsi afficher le nom de la 13eme carte du deck par exemple :
 	printf ("%s\n",deck1[12].Entity.Name);
 
+
+	// Dek Aleatoire --------------------------------------------
     card deckAlea[20];
 
 	for(int i = 0; i < 20; i++){
-        card X = {ElementNumber[rand()%4], EntityNumber[rand()%18]};
+        card X = {EntityNumber[rand()%18] ,ElementNumber[rand()%4],};
         deckAlea[i] = X;
 	}
 
 	DeckDefinition(deckAlea);
 
-        printf ("%s\n",ElementNumber[0].Name);
-
-
-
-
-
-
-
+	for (int i = 0; i < 20; i++){
+        printf("%s\n", deckAlea[i].Entity.Name);
+	}
+    //-----------------------------------------------------------
 
 
 
