@@ -130,13 +130,14 @@ int main(){
 	for(int i = 0; i < 20; i ++){
 		//char AleaElement[30] = ElementNumber[rand()%4];
         //char AleaEntity[30] = EntityNumber[rand()%18];
-        card X = {ElementNumber[rand()%4], EntityNumber[rand()%18]};
+        card X = {ElementNumber[rand()%4].Name, EntityNumber[rand()%18].Name};
         deckAlea[i] = {X};
         printf("%s", EntityNumber[rand()%18]);
 
 	}
 
-    printf("%s\n", EntityNumber[2].Name);
+
+    printf("%s\n", ElementNumber[2].Name);
 
 
 
