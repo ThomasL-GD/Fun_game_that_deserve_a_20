@@ -87,6 +87,7 @@ int main(){
 	element lave = {"e Lave",8,1,0,1,-1,"Inflige un degat supplementaire de contre-attaque"};
 	element sable = {"e Sable",9,0,-1,1,1,"Divise par deux les degats de contre-attaque recus"};
 
+	element ElementNumber[4] = {eau, feu, air, terre};
 
 	entity Loup = {"Loup d", 3, 3, 4, 4};                                    //balance
 	entity CrabeRoyal = {"Crabe Royal d", 3, 2, 7, 4};                    //HP
@@ -107,7 +108,7 @@ int main(){
     entity Buffle = {"Buffle d", 4, 2, 5, 2};                             //HP + attack
     entity ManteReligieuse = {"Mante Religieuse d", 6, 2, 3, 4};          //attack
 
-
+    entity EntityNumber[18]= {Loup, CrabeRoyal, DragonDeKomodo, AraigneeCracheuse, CrocodileAffame, ChefAlpaga, Grenouille, TortueSonore, BoucTemeraire, Aigle, Elephant, Jaguar, SerpentCorosif, PlanteMarecageuse, Scorpion, Phasme, Buffle, ManteReligieuse};
 
 	/////////////////////////////////////////////////DEFINITION DES DECKS///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -123,14 +124,19 @@ int main(){
 	//On peut ainsi afficher le nom de la 13eme carte du deck par exemple :
 	printf ("%s\n",deck1[12].Entity.Name);
 
+    card deckAlea[20];
+    card A;
+	srand(time(NULL)); // initialisation de rand
+	for(int i = 0; i < 20; i ++){
+		//char AleaElement[30] = ElementNumber[rand()%4];
+        //char AleaEntity[30] = EntityNumber[rand()%18];
+        card X = {ElementNumber[rand()%4], EntityNumber[rand()%18]};
+        deckAlea[i] = {X};
+        printf("%s", EntityNumber[rand()%18]);
 
+	}
 
-
-
-
-
-
-
+    printf("%s\n", EntityNumber[2].Name);
 
 
 
