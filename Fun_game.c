@@ -98,7 +98,7 @@ void Draw (card deck[20], card hand[20], int cardsDrew[20]){
 
 void ShowHand(card hand[20]){
 	
-	printf("\n");
+	//printf("\n");
 	
 	for(int i = 0; i<20; i++){
 		
@@ -111,6 +111,27 @@ void ShowHand(card hand[20]){
 	}
 	
 	printf("\n");
+	
+};
+
+void ShowField(card field1[20]){
+
+	printf("\n");
+
+	for(int i = 0; i<3; i++){
+		
+		if (field1[i].Element.ID == 10){
+			
+			printf(" %d- (vide)\n",i+1);
+			
+		}
+		else{
+			
+			printf(" %d- %s  %d/%d/%d/%d\n",i+1,field1[i].Entity.Name,field1[i].Entity.Atk,field1[i].Entity.AtkSpe,field1[i].Entity.Life,field1[i].Entity.LifeSpe);
+			
+		}
+		
+	}
 	
 };
 
@@ -148,6 +169,65 @@ void Fight (card deckP[20], card deckA[20]){
 	
 	ShowHand(handP);
 	
+	int bGame = 0;
+	char sChoice[64];
+	int nChoice = 0;
+	
+	while (bGame == 0){
+		
+		////////////PLAYER TURN//////////////////////////
+		
+		printf("\n\n	---VOTRE TOUR---\n");
+		Draw(deckP,handP,cardsDrewP);
+		strcpy(sChoice,"0");
+		actionsP = 3;
+		nChoice = 0;
+		
+		while (strcmp(sChoice,"Attaquer") !=0){
+			
+			printf("\n   Votre main est composée de :\n");
+			ShowHand(handP);
+			printf("Vous avez %d point(s) d'action restants\n",actionsP);
+			printf(" -Tapez un nom de carte pour la poser\n");
+			printf(" -Tapez \"Attaquer\" pour passer en phase d'attaque\n");
+			
+			if(scanf(" %63[^\n]",sChoice)==1){};
+			printf("\n");
+		
+		
+			for(int i = 0; i<20; i++){
+		
+				if( strcmp(handP[i].Entity.Name,sChoice) == 0){
+					
+					nChoice = 0;
+					
+					while(nChoice != 1 && nChoice != 2 && nChoice != 3){
+					
+						printf("   Ou voulez-vous poser cette carte ? (posez la sur une carte deja posee pour faire une fusion !)\n");
+						
+						ShowField(fieldP);
+						
+						scanf("%d",&nChoice);
+						
+						printf("\n");
+					
+					}
+					
+					//CardPose();
+					
+				}
+			
+			}
+		
+		}
+	
+		
+		
+		
+		
+		/////////////IA TURN//////////////////////////////
+		
+	}
 	
 };
 
@@ -202,7 +282,7 @@ int main(){
 
 	//Pour recuperer une carte il faut "deck1[rang voulu]"
 	//On peut ainsi afficher le nom de la 13eme carte du deck par exemple :
-	printf ("%s\n",deck1[12].Entity.Name);
+	//printf ("%s\n",deck1[12].Entity.Name);
 	
 
 
