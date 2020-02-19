@@ -40,7 +40,7 @@ typedef struct Card card;
 
 int main(){
 
-	entity Loup = {"Loup d", 4,4,3,3};                                    //balance
+	entity Loup = {"Loup d", 3,3,4,4};                                    //balance
 	entity CrabeRoyal = {"Crabe Royal d", 7, 4, 3, 2};                    //HP
 	entity DragonDeKomodo = {"Drakodo d", 4, 4, 6, 0};                    //attack + HP (phy + spe)
 	entity AraigneeCracheuse = {"Araignee Cracheuse d", 2, 4, 2, 6};      //attack spe
