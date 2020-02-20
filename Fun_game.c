@@ -39,6 +39,12 @@ typedef struct Card card;
 
 
 
+void clearScreen(){
+	for(int i = 0; i <70; i++){
+		printf("\n");
+	}
+};
+
 
 
 void DeckDefinition (card deck[20]){
@@ -54,6 +60,8 @@ void DeckDefinition (card deck[20]){
 	}
 	
 };
+
+
 
 
 
@@ -99,6 +107,7 @@ void Draw (card deck[20], card hand[20], int cardsDrew[20]){
 void ShowHand(card hand[20]){
 	
 	//printf("\n");
+	int nCounter = 0;
 	
 	for(int i = 0; i<20; i++){
 		
@@ -107,8 +116,11 @@ void ShowHand(card hand[20]){
 			printf(" - %s  %d/%d/%d/%d\n",hand[i].Entity.Name,hand[i].Entity.Atk,hand[i].Entity.AtkSpe,hand[i].Entity.Life,hand[i].Entity.LifeSpe);
 			
 		}
+		else{nCounter += 1;}
 		
 	}
+	
+	if (nCounter >= 20){printf(" - (main vide)\n");}
 	
 	printf("\n");
 	
@@ -135,6 +147,12 @@ void ShowField(card field1[20]){
 	
 };
 
+void CardDetail(card cardShown){
+	
+	printf("\n -> \"%s\" \n   Attaque : %d\n   Attaque spe : %d\n   Vie restante : %d\n   Vie spe restante : %d\n   Pouvoir d'element : %s\n\n",cardShown.Entity.Name, cardShown.Entity.Atk, cardShown.Entity.AtkSpe, cardShown.Entity.Life, cardShown.Entity.LifeSpe, cardShown.Element.Description);
+	
+};
+
 
 
 void Fight (card deckP[20], card deckA[20]){
@@ -148,6 +166,7 @@ void Fight (card deckP[20], card deckA[20]){
 	
 	element empty = {"Z",10,0,0,0,0,""};
 	entity Empty = {"z",0,0,0,0};
+	card EMPTY = {Empty,empty};
 	
 	// Les terrains des deux joueurs
 	card fieldA[3] ={Empty,empty, Empty,empty, Empty,empty};
@@ -165,9 +184,6 @@ void Fight (card deckP[20], card deckA[20]){
 	
 	Draw(deckP,handP,cardsDrewP);
 	Draw(deckP,handP,cardsDrewP);
-	Draw(deckP,handP,cardsDrewP);
-	
-	ShowHand(handP);
 	
 	int bGame = 0;
 	char sChoice[64];
@@ -175,9 +191,12 @@ void Fight (card deckP[20], card deckA[20]){
 	
 	while (bGame == 0){
 		
+		clearScreen();
+		
 		////////////PLAYER TURN//////////////////////////
 		
 		printf("\n\n	---VOTRE TOUR---\n");
+		///////SET UP PHASE////////
 		Draw(deckP,handP,cardsDrewP);
 		strcpy(sChoice,"0");
 		actionsP = 3;
@@ -185,43 +204,102 @@ void Fight (card deckP[20], card deckA[20]){
 		
 		while (strcmp(sChoice,"Attaquer") !=0){
 			
-			printf("\n   Votre main est composée de :\n");
+			printf("\n  Votre main est composee de :\n");
 			ShowHand(handP);
 			printf("Vous avez %d point(s) d'action restants\n",actionsP);
 			printf(" -Tapez un nom de carte pour la poser\n");
 			printf(" -Tapez \"Attaquer\" pour passer en phase d'attaque\n");
+			printf(" -Tapez \"Check\" pour regarder le terrain\n");
 			
 			if(scanf(" %63[^\n]",sChoice)==1){};
 			printf("\n");
 		
-		
-			for(int i = 0; i<20; i++){
-		
-				if( strcmp(handP[i].Entity.Name,sChoice) == 0){
-					
-					nChoice = 0;
-					
-					while(nChoice != 1 && nChoice != 2 && nChoice != 3){
-					
-						printf("   Ou voulez-vous poser cette carte ? (posez la sur une carte deja posee pour faire une fusion !)\n");
+			
+			if(actionsP >= 1){
+			
+				for(int i = 0; i<20; i++){
+			
+					if( strcmp(handP[i].Entity.Name,sChoice) == 0){
 						
-						ShowField(fieldP);
+						nChoice = -1;
 						
-						scanf("%d",&nChoice);
+						while(nChoice != 0 && nChoice != 1 && nChoice != 2){
 						
-						printf("\n");
+							printf("   Ou voulez-vous poser cette carte ? (posez la sur une carte deja posee pour faire une fusion !)\n");
+							
+							ShowField(fieldP);
+							
+							scanf("%d",&nChoice);
+							// On doit réduire nChoice de 1 car dans ShowField() on ment au joueur sur les numéros de cases
+							nChoice -= 1;
+							
+							printf("\n");
+						
+						}
+						
+						if(fieldP[nChoice].Element.ID == 10){
+							
+							fieldP[nChoice] = handP[i];
+							handP[i] = EMPTY;
+							
+							actionsP -=1;
+						
+						}
+						else if (fieldP[nChoice].Element.ID <=9 && fieldP[nChoice].Element.ID >= 0){
+							
+							//FUUUUUUU-SIOOOOON
+							printf("\n Fusion a coder\n");
+							
+						}			
 					
 					}
-					
-					//CardPose();
-					
+				
 				}
 			
 			}
+			
+			
+			//Board check
+			if(strcmp(sChoice, "Check") == 0){
+				
+				printf("\n   Terrain adverse :\n");
+				ShowField(fieldA);
+				
+				printf("\n   Votre terrain :\n");
+				ShowField(fieldP);
+				
+				printf("\n Tapez un nom de carte pour la voir en detail, tapez n'importe quoi d'autre pour revenir au menu\n");
+				
+				if(scanf(" %63[^\n]",sChoice)==1){};
+				
+				for(int i = 0; i<3; i++){
+			
+					if( strcmp(fieldP[i].Entity.Name,sChoice) == 0){
+						
+						printf("\n\n");
+						CardDetail(fieldP[i]);
+						
+					}
+					
+					if( strcmp(fieldA[i].Entity.Name,sChoice) == 0){
+						
+						printf("\n\n");
+						CardDetail(fieldA[i]);
+						
+					}
+					
+				}
+				
+				// Pour éviter que le joueur tape "Attaquer" et que ça lance la phase d'attaque
+				strcpy(sChoice,"");
+				
+			}
 		
 		}
-	
 		
+		
+		//////ATTACK PHASE////////
+		printf("\nAttaque-----------\n");
 		
 		
 		
@@ -235,9 +313,11 @@ int main(){
 	
 	srand(time(NULL));
 	
+	clearScreen();
+	
 	//////////////////////////////////////////BASE DE DONNEES DES CARTES//////////////////////////////////////////////////////////
 	element eau = {"'Eau",0,-1,1,1,0,"Soigne 1PV par tour aux autres creatures sous votre controle"};
-	element feu = {"e Feu",1,2,0,-1,0,"Inflige deux tours de brulure (-1PV par tour) pour toute attaque physique effectuÃ©e"};
+	element feu = {"e Feu",1,2,0,-1,0,"Inflige deux tours de brulure (-1PV par tour) pour toute attaque physique effectuee"};
 	element air = {"'Air",2,-1,0,1,1,"Subit 1 dÃ©gat magique de moins par attaque magique subie"};
 	element terre = {"e Terre",3,0,-1,2,0,"Subit 1 dÃ©gat physique de moins par attaque physique subie"};
 	
