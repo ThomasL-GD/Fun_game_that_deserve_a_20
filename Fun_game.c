@@ -24,6 +24,7 @@ struct Element{
 	int ModifLife;
 	int ModifLifeSpe;
 	char Description[255];
+	int bFusion;
 
 };
 typedef struct Element element;
@@ -101,6 +102,19 @@ void Draw (card deck[20], card hand[20], int cardsDrew[20]){
 	
 	hand[index] = deck[nRandom];
 	
+	for (int i = 0; i<20; i++){
+		
+		if (cardsDrew[i] == -1){
+			
+			index = i;
+			i = 22;
+			
+		}
+		
+	}
+	
+	cardsDrew[index] = nRandom;
+	
 };
 
 void Fusion(card field[3], card fusionCard,int index,element elementsList[10]){
@@ -113,119 +127,40 @@ void Fusion(card field[3], card fusionCard,int index,element elementsList[10]){
 
 	strcpy(field[index].Entity.Name, "Creature Fusion d");
 	
-	//eau
-	if(field[index].Element.ID == 0){
+	for(int i = 0; i<4; i++){
 		
-		//eau
-		if(fusionCard.Element.ID == 0){
+		if(field[index].Element.ID == i){
 			
-			fusionElement = elementsList[0];
-			
-		}
-		//feu
-		else if(fusionCard.Element.ID == 1){
-			
-			fusionElement = elementsList[4];
-			
-		}
-		//air
-		else if(fusionCard.Element.ID == 2){
-			
-			fusionElement = elementsList[5];
-			
-		}
-		//terre
-		else if(fusionCard.Element.ID == 3){
-			
-			fusionElement = elementsList[6];
-			
-		}
+			for(int j = 0; j<4; j++){
+				
+				if(fusionCard.Element.ID == j){
+					
+					if(i == j){
+						fusionElement = elementsList[i];
+					}
+					else if(i+j == 1){
+						fusionElement = elementsList[4];
+					}
+					else if(i+j == 2){
+						fusionElement = elementsList[5];
+					}
+					else if(i+j == 3 && (i == 0 || j == 0)){
+						fusionElement = elementsList[6];
+					}
+					else if(i+j == 3 && (i == 1 || j == 1)){
+						fusionElement = elementsList[7];
+					}
+					else if(i+j == 4){
+						fusionElement = elementsList[8];
+					}
+					else if(i+j == 5){
+						fusionElement = elementsList[9];
+					}
+					
+				}
+				
+			}
 		
-	}
-	//feu
-	else if(field[index].Element.ID == 1){
-		
-		//eau
-		if(fusionCard.Element.ID == 0){
-			
-			fusionElement = elementsList[4];
-			
-		}
-		//feu
-		else if(fusionCard.Element.ID == 1){
-			
-			fusionElement = elementsList[1];
-			
-		}
-		//air
-		else if(fusionCard.Element.ID == 2){
-			
-			fusionElement = elementsList[7];
-			
-		}
-		//terre
-		else if(fusionCard.Element.ID == 3){
-			
-			fusionElement = elementsList[8];
-			
-		}
-		
-	}
-	//air
-	else if(field[index].Element.ID == 2){
-		
-		//eau
-		if(fusionCard.Element.ID == 0){
-			
-			fusionElement = elementsList[5];
-			
-		}
-		//feu
-		else if(fusionCard.Element.ID == 1){
-			
-			fusionElement = elementsList[7];
-			
-		}
-		//air
-		else if(fusionCard.Element.ID == 2){
-			
-			fusionElement = elementsList[2];
-			
-		}
-		//terre
-		else if(fusionCard.Element.ID == 3){
-			
-			fusionElement = elementsList[9];
-			
-		}
-		
-	}
-	//terre
-	else if(field[index].Element.ID == 3){
-		
-		//eau
-		if(fusionCard.Element.ID == 0){
-			
-			fusionElement = elementsList[6];
-			
-		}
-		//feu
-		else if(fusionCard.Element.ID == 1){
-			
-			fusionElement = elementsList[8];
-			
-		}
-		//air
-		else if(fusionCard.Element.ID == 2){
-			
-			fusionElement = elementsList[9];
-			
-		}
-		//terre
-		else if(fusionCard.Element.ID == 3){
-			
-			fusionElement = elementsList[3];
-			
 		}
 		
 	}
@@ -235,6 +170,7 @@ void Fusion(card field[3], card fusionCard,int index,element elementsList[10]){
 	field[index].Entity.AtkSpe += fusionElement.ModifAtkSpe + fusionCard.Entity.AtkSpe;
 	field[index].Entity.Life += fusionElement.ModifLife + fusionCard.Entity.Life;
 	field[index].Entity.LifeSpe += fusionElement.ModifLifeSpe + fusionCard.Entity.LifeSpe;
+	field[index].Element.bFusion = 1;
 	
 	printf(" resulte de : %s !!!\n",field[index].Entity.Name);
 	
@@ -353,56 +289,65 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 			printf("\n");
 		
 			
-			if(actionsP >= 1){
-			
-				for(int i = 0; i<20; i++){
-			
-					if( strcmp(handP[i].Entity.Name,sChoice) == 0){
+		
+			for(int i = 0; i<20; i++){
+		
+				if( strcmp(handP[i].Entity.Name,sChoice) == 0 && actionsP >= 1){
+					
+					nChoice = -1;
+					
+					while(nChoice != 0 && nChoice != 1 && nChoice != 2){
+					
+						printf("   Ou voulez-vous poser cette carte ? (posez la sur une carte deja posee pour faire une fusion !)\n");
 						
-						nChoice = -1;
+						ShowField(fieldP);
 						
-						while(nChoice != 0 && nChoice != 1 && nChoice != 2){
+						scanf("%d",&nChoice);
+						// On doit réduire nChoice de 1 car dans ShowField() on ment au joueur sur les numéros de cases
+						nChoice -= 1;
 						
-							printf("   Ou voulez-vous poser cette carte ? (posez la sur une carte deja posee pour faire une fusion !)\n");
-							
-							ShowField(fieldP);
-							
-							scanf("%d",&nChoice);
-							// On doit réduire nChoice de 1 car dans ShowField() on ment au joueur sur les numéros de cases
-							nChoice -= 1;
-							
-							printf("\n");
-						
-						}
-						
-						if(fieldP[nChoice].Element.ID == 10){
-							
-							fieldP[nChoice] = handP[i];
-							handP[i] = EMPTY;
-							
-							actionsP -=1;
-						
-						}
-						else if (fieldP[nChoice].Element.ID <=9 && fieldP[nChoice].Element.ID >= 0 && actionsP >= 2){
-							
-							//FUUUUUUU-SIOOOOON
-							Fusion(fieldP,handP[i],nChoice,elementsList);
-							handP[i] = EMPTY;
-							
-							actionsP -=2;
-							
-						}
-						else if (fieldP[nChoice].Element.ID <=9 && fieldP[nChoice].Element.ID >= 0 && actionsP < 2){
-							
-							printf("Vous n'avez pas les 2 points d'actions nécessaires pour effectuer une fusion...\n");
-							
-						}					
+						printf("\n");
 					
 					}
+					
+					if(fieldP[nChoice].Element.ID == 10){
+						
+						fieldP[nChoice] = handP[i];
+						handP[i] = EMPTY;
+						
+						actionsP -=1;
+					
+					}
+					else if (fieldP[nChoice].Element.ID <=3 && fieldP[nChoice].Element.ID >= 0 && actionsP >= 2 && fieldP[nChoice].Element.bFusion == 0){
+						
+						//FUUUUUUU-SIOOOOON
+						Fusion(fieldP,handP[i],nChoice,elementsList);
+						handP[i] = EMPTY;
+						
+						actionsP -=2;
+						
+					}
+					else if (actionsP < 2){
+						
+						printf("Vous n'avez pas les 2 points d'actions nécessaires pour effectuer une fusion...\n");
+						
+					}
+					else if (fieldP[nChoice].Element.bFusion == 1){
+						
+						printf("Vous ne pouvez pas effectuer de fusion sur une creature deja fusionnee...\n");
+						
+					}						
 				
+				}
+				else if(strcmp(handP[i].Entity.Name,sChoice) == 0 && actionsP == 0){
+					
+					printf("!Vous n'avez plus de points d'actions, attendez le prochain tour pour poser des creatures!\n");
+					
 				}
 			
 			}
+			
+			
 			
 			
 			//Board check
@@ -462,17 +407,17 @@ int main(){
 	clearScreen();
 	
 	//////////////////////////////////////////BASE DE DONNEES DES CARTES//////////////////////////////////////////////////////////
-	element eau = {"'Eau",0,-1,1,1,0,"Soigne 1PV par tour aux autres creatures sous votre controle"};
-	element feu = {"e Feu",1,2,0,-1,0,"Inflige deux tours de brulure (-1PV par tour) pour toute attaque physique effectuee"};
-	element air = {"'Air",2,-1,0,1,1,"Subit 1 dÃ©gat magique de moins par attaque magique subie"};
-	element terre = {"e Terre",3,0,-1,2,0,"Subit 1 dÃ©gat physique de moins par attaque physique subie"};
+	element eau = {"'Eau",0,-1,1,1,0,"Soigne 1PV par tour aux autres creatures sous votre controle",0};
+	element feu = {"e Feu",1,2,0,-1,0,"Inflige deux tours de brulure (-1PV par tour) pour toute attaque physique effectuee",0};
+	element air = {"'Air",2,-1,0,1,1,"Subit 1 degat magique de moins par attaque magique subie",0};
+	element terre = {"e Terre",3,0,-1,2,0,"Subit 1 dÃ©gat physique de moins par attaque physique subie",0};
 	
-	element fumee = {"e Fumee",4,0,1,1,-1,"Inflige 1 degat a tous les adversaires par tour"};
-	element glace = {"e Glace",5,0,1,-1,1,"Reduit l'attaque de 1 point pendant 2 tours a celui qui subit une attaque de glace"};
-	element nature = {"e Nature",6,-1,0,1,1,"Se soigne de 1PV par tour et reduit les degats subits de 1 a chaque attaque"};
-	element foudre = {"e Foudre",7,0,2,0,-1,"Fait un degat magique de plus et un degat supplementaire pour chaque attaque foudre deja lancee ce tour"};
-	element lave = {"e Lave",8,1,0,1,-1,"Inflige un degat supplementaire de contre-attaque"};
-	element sable = {"e Sable",9,0,-1,1,1,"Divise par deux les degats de contre-attaque recus"};
+	element fumee = {"e Fumee",4,0,1,1,-1,"Inflige 1 degat a tous les adversaires par tour",1};
+	element glace = {"e Glace",5,0,1,-1,1,"Reduit l'attaque de 1 point pendant 2 tours a celui qui subit une attaque de glace",1};
+	element nature = {"e Nature",6,-1,0,1,1,"Se soigne de 1PV par tour et reduit les degats subits de 1 a chaque attaque",1};
+	element foudre = {"e Foudre",7,0,2,0,-1,"Fait un degat magique de plus et un degat supplementaire pour chaque attaque foudre deja lancee ce tour",1};
+	element lave = {"e Lave",8,1,0,1,-1,"Inflige un degat supplementaire de contre-attaque",1};
+	element sable = {"e Sable",9,0,-1,1,1,"Divise par deux les degats de contre-attaque recus",1};
 	
 	element elementsList[10] = {eau,feu,air,terre, fumee,glace,nature,foudre,lave,sable};
 	
