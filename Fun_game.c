@@ -103,6 +103,144 @@ void Draw (card deck[20], card hand[20], int cardsDrew[20]){
 	
 };
 
+void Fusion(card field[3], card fusionCard,int index,element elementsList[10]){
+
+	element fusionElement;
+	
+	
+	printf("\n!!! La Fusion entre %s et %s",field[index].Entity.Name, fusionCard.Entity.Name);
+	
+
+	strcpy(field[index].Entity.Name, "Creature Fusion d");
+	
+	//eau
+	if(field[index].Element.ID == 0){
+		
+		//eau
+		if(fusionCard.Element.ID == 0){
+			
+			fusionElement = elementsList[0];
+			
+		}
+		//feu
+		else if(fusionCard.Element.ID == 1){
+			
+			fusionElement = elementsList[4];
+			
+		}
+		//air
+		else if(fusionCard.Element.ID == 2){
+			
+			fusionElement = elementsList[5];
+			
+		}
+		//terre
+		else if(fusionCard.Element.ID == 3){
+			
+			fusionElement = elementsList[6];
+			
+		}
+		
+	}
+	//feu
+	else if(field[index].Element.ID == 1){
+		
+		//eau
+		if(fusionCard.Element.ID == 0){
+			
+			fusionElement = elementsList[4];
+			
+		}
+		//feu
+		else if(fusionCard.Element.ID == 1){
+			
+			fusionElement = elementsList[1];
+			
+		}
+		//air
+		else if(fusionCard.Element.ID == 2){
+			
+			fusionElement = elementsList[7];
+			
+		}
+		//terre
+		else if(fusionCard.Element.ID == 3){
+			
+			fusionElement = elementsList[8];
+			
+		}
+		
+	}
+	//air
+	else if(field[index].Element.ID == 2){
+		
+		//eau
+		if(fusionCard.Element.ID == 0){
+			
+			fusionElement = elementsList[5];
+			
+		}
+		//feu
+		else if(fusionCard.Element.ID == 1){
+			
+			fusionElement = elementsList[7];
+			
+		}
+		//air
+		else if(fusionCard.Element.ID == 2){
+			
+			fusionElement = elementsList[2];
+			
+		}
+		//terre
+		else if(fusionCard.Element.ID == 3){
+			
+			fusionElement = elementsList[9];
+			
+		}
+		
+	}
+	//terre
+	else if(field[index].Element.ID == 3){
+		
+		//eau
+		if(fusionCard.Element.ID == 0){
+			
+			fusionElement = elementsList[6];
+			
+		}
+		//feu
+		else if(fusionCard.Element.ID == 1){
+			
+			fusionElement = elementsList[8];
+			
+		}
+		//air
+		else if(fusionCard.Element.ID == 2){
+			
+			fusionElement = elementsList[9];
+			
+		}
+		//terre
+		else if(fusionCard.Element.ID == 3){
+			
+			fusionElement = elementsList[3];
+			
+		}
+		
+	}
+	
+	strcat(field[index].Entity.Name, fusionElement.Name);
+	field[index].Entity.Atk += fusionElement.ModifAtk + fusionCard.Entity.Atk;
+	field[index].Entity.AtkSpe += fusionElement.ModifAtkSpe + fusionCard.Entity.AtkSpe;
+	field[index].Entity.Life += fusionElement.ModifLife + fusionCard.Entity.Life;
+	field[index].Entity.LifeSpe += fusionElement.ModifLifeSpe + fusionCard.Entity.LifeSpe;
+	
+	printf(" resulte de : %s !!!\n",field[index].Entity.Name);
+	
+	
+};
+
 
 void ShowHand(card hand[20]){
 	
@@ -155,7 +293,7 @@ void CardDetail(card cardShown){
 
 
 
-void Fight (card deckP[20], card deckA[20]){
+void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 	
 	// Sert a connaitre les cartes deja piochees pour ne pas les repiocher a nouveau... On remplacera les -1 par l'index des cartes deja piochees
 	int cardsDrewP[20] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
@@ -245,12 +383,20 @@ void Fight (card deckP[20], card deckA[20]){
 							actionsP -=1;
 						
 						}
-						else if (fieldP[nChoice].Element.ID <=9 && fieldP[nChoice].Element.ID >= 0){
+						else if (fieldP[nChoice].Element.ID <=9 && fieldP[nChoice].Element.ID >= 0 && actionsP >= 2){
 							
 							//FUUUUUUU-SIOOOOON
-							printf("\n Fusion a coder\n");
+							Fusion(fieldP,handP[i],nChoice,elementsList);
+							handP[i] = EMPTY;
 							
-						}			
+							actionsP -=2;
+							
+						}
+						else if (fieldP[nChoice].Element.ID <=9 && fieldP[nChoice].Element.ID >= 0 && actionsP < 2){
+							
+							printf("Vous n'avez pas les 2 points d'actions nécessaires pour effectuer une fusion...\n");
+							
+						}					
 					
 					}
 				
@@ -328,6 +474,8 @@ int main(){
 	element lave = {"e Lave",8,1,0,1,-1,"Inflige un degat supplementaire de contre-attaque"};
 	element sable = {"e Sable",9,0,-1,1,1,"Divise par deux les degats de contre-attaque recus"};
 	
+	element elementsList[10] = {eau,feu,air,terre, fumee,glace,nature,foudre,lave,sable};
+	
 
 	entity Loup = {"Loup d", 4,4,3,3};                                    //balance
 	entity CrabeRoyal = {"Crabe Royal d", 7, 4, 3, 2};                    //HP
@@ -378,7 +526,7 @@ int main(){
 
 
 
-	Fight (deck1,deck1);
+	Fight (deck1,deck1,elementsList);
 
 
 
