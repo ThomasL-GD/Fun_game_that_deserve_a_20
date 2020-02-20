@@ -171,6 +171,7 @@ void Fusion(card field[3], card fusionCard,int index,element elementsList[10]){
 	field[index].Entity.Life += fusionElement.ModifLife + fusionCard.Entity.Life;
 	field[index].Entity.LifeSpe += fusionElement.ModifLifeSpe + fusionCard.Entity.LifeSpe;
 	field[index].Element.bFusion = 1;
+	strcpy(field[index].Element.Description, fusionElement.Description);
 	
 	printf(" resulte de : %s !!!\n",field[index].Entity.Name);
 	
