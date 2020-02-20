@@ -70,6 +70,20 @@ void Fight (card deckP[20], card deckA[20]){
 	card handA[20] = {Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty};
 };
 
+void RandomDeck (card *RandDeck, entity EntityNumb[18], element ElementNumb[4]){
+
+        for(int i = 0; i < 20; i++){
+            card X = {EntityNumb[rand()%18] ,ElementNumb[rand()%4],};
+            RandDeck[i] = X;
+        }
+
+        DeckDefinition(RandDeck);
+
+        for (int i = 0; i < 20; i++){
+            printf("%s\n", RandDeck[i].Entity.Name);
+        }
+}
+
 int main(){
 
 	srand(time(NULL));
@@ -125,21 +139,10 @@ int main(){
 	printf ("%s\n",deck1[12].Entity.Name);
 
 
-	// Dek Aleatoire --------------------------------------------
-    card deckAlea[20];
+	card deckAlea[20];
 
-	for(int i = 0; i < 20; i++){
-        card X = {EntityNumber[rand()%18] ,ElementNumber[rand()%4],};
-        deckAlea[i] = X;
-	}
-
-	DeckDefinition(deckAlea);
-
-	for (int i = 0; i < 20; i++){
-        printf("%s\n", deckAlea[i].Entity.Name);
-	}
-    //-----------------------------------------------------------
-
+    // funtion void permettant de générer un deck aléatoirement
+	RandomDeck(&deckAlea, EntityNumber, ElementNumber);
 
 
 
