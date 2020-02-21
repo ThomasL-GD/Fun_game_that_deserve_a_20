@@ -239,7 +239,7 @@ int DirectAttack(int * ID, int * life, int * dmg, int * thunderCounter){
 		
 		thunderBonus += 2* *thunderCounter;
 		
-		printf("Bonus foudre : %d degats !\n",thunderBonus);
+		printf("	!Bonus foudre : %d degats !\n",thunderBonus);
 		
 		*dmg += thunderBonus;
 		
@@ -249,6 +249,107 @@ int DirectAttack(int * ID, int * life, int * dmg, int * thunderCounter){
 	
 	return *dmg;
 };
+
+
+
+void SmokeDamage(card field[3]){
+	
+	int nRandom = 0;
+	
+	for(int i = 0; i<3; i++){
+		
+		if(field[i].Element.ID != 10){
+			
+			nRandom = rand()%2;
+			
+			if(nRandom == 0 && field[i].Entity.Life > 0){
+				
+				field[i].Entity.Life -= 1;
+				
+			}
+			else if(nRandom == 1 && field[i].Entity.LifeSpe > 0){
+				
+				field[i].Entity.LifeSpe -= 1;
+				
+			}
+			else if(field[i].Entity.Life > 0){
+				
+				field[i].Entity.Life -= 1;
+				
+			}
+			else if(field[i].Entity.LifeSpe > 0){
+				
+				field[i].Entity.LifeSpe -= 1;
+				
+			}
+			
+		}
+		
+	}
+	
+};
+
+void WaterHeal(card field[3], int index){
+	
+	for(int i = 0; i < 3; i++){
+	
+		//Pour eviter que la creature s'auto-soigne
+		if(index == i){i++;}
+		
+		if(field[i].Element.ID != 10 && i < 4){
+			
+			if(field[i].Entity.Life > field[i].Entity.LifeSpe && field[i].Entity.LifeSpe > 0){
+				
+				field[i].Entity.LifeSpe++;
+				
+			}
+			else if(field[i].Entity.Life < field[i].Entity.LifeSpe && field[i].Entity.Life > 0){
+				
+				field[i].Entity.Life++;
+				
+			}
+			else if(field[i].Entity.Life > 0){
+				
+				field[i].Entity.Life++;
+				
+			}
+			else if(field[i].Entity.LifeSpe > 0){
+				
+				field[i].Entity.LifeSpe++;
+				
+			}
+			
+		}
+		
+	}
+	
+};
+
+void NatureHeal(card field[3], int index){
+	
+	if(field[index].Entity.Life > field[index].Entity.LifeSpe && field[index].Entity.LifeSpe > 0){
+	
+		field[index].Entity.LifeSpe++;
+	
+	}
+	else if(field[index].Entity.Life < field[index].Entity.LifeSpe && field[index].Entity.Life > 0){
+		
+		field[index].Entity.Life++;
+		
+	}
+	else if(field[index].Entity.Life > 0){
+		
+		field[index].Entity.Life++;
+		
+	}
+	else if(field[index].Entity.LifeSpe > 0){
+		
+		field[index].Entity.LifeSpe++;
+	
+	}
+	
+};
+
 
 
 
@@ -278,6 +379,9 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 	
 	int dmg = 0;
 	int i = 0;
+	
+	// Chaque index passe a 1 si la creature qui correspond a l'index a deja attaqué
+	int alreadyAttacked[3] = {0,0,0};
 	
 	
 	int thunderCounter = 0;
@@ -310,6 +414,7 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 		actionsP = 3;
 		nChoice = 0;
 		thunderCounter = 0;
+		for(int i = 0; i<3;i++){alreadyAttacked[i] = 0;}
 		
 		while (strcmp(sChoice,"Attaquer") !=0){
 			
@@ -364,7 +469,7 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 					}
 					else if (actionsP < 2){
 						
-						printf("Vous n'avez pas les 2 points d'actions nécessaires pour effectuer une fusion...\n");
+						printf("Vous n'avez pas les 2 points d'actions necessaires pour effectuer une fusion...\n");
 						
 					}
 					else if (fieldP[nChoice].Element.bFusion == 1){
@@ -457,9 +562,16 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 				printf("  Il n'y a aucune creature a l'endroit cible...\n");
 				
 			}
+			else if (alreadyAttacked[nChoice] == 1){
+				
+				printf("  Cette creature a deja attaque pour ce tour...\n");
+				
+			}
 			else if (fieldP[nChoice].Element.ID <= 9 && fieldP[nChoice].Element.ID >= 0){
 				
 				nChoice = 0;
+				
+				alreadyAttacked[nChoice] = 1;
 				
 				while(nChoice != 1 && nChoice != 2){
 					
@@ -489,17 +601,19 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 					else{
 						
 						if(nChoice == 1){
-						
-							dmg = DirectAttack(&fieldP[memo].Element.ID, &lifeA, &fieldP[memo].Entity.Atk, 0);
 							
-							printf("   !Attaque directe!\n");
+							int none = 0;
+						
+							dmg = DirectAttack(&fieldP[memo].Element.ID, &lifeA, &fieldP[memo].Entity.Atk, &none);
+							
+							printf("	!Attaque directe!\n");
 							
 						}
 						else if (nChoice == 2){
 							
 							dmg = DirectAttack(&fieldP[memo].Element.ID, &lifeA, &fieldP[memo].Entity.AtkSpe, &thunderCounter);
 							
-							printf("   !Attaque speciale directe!\n");
+							printf("	!Attaque speciale directe!\n");
 							
 						}
 						
@@ -521,12 +635,48 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 			
 		}
 		
+		if(actionsP < 1){printf("vous n'avez plus de points d'actions, fin du tour obligatoire\n");}
+		
 		//////EFFECTS PHASE/////////
+		printf("\n");
+		
+		for(int i = 0; i<3; i++){
+			
+			//Soin passif eau
+			if (fieldP[i].Element.ID == 0){
+				
+				printf("   + %s soigne toutes vos autres creatures +\n",fieldP[i].Entity.Name);
+				
+				WaterHeal(fieldP,i);
+				
+			}
+			
+			//Degat passif smoke
+			if (fieldP[i].Element.ID == 4){
+				
+				printf("   ! %s inflige des degats a toutes les creatures adverses !\n",fieldP[i].Entity.Name);
+				
+				SmokeDamage(fieldA);
+				
+			}
+			
+			//soin passif nature
+			if (fieldP[i].Element.ID == 6){
+				
+				printf("   + %s se soigne +\n",fieldP[i].Entity.Name);
+				
+				NatureHeal(fieldP,i);
+				
+			}
+			
+		}
+		
 		
 		
 		
 		/////////////IA TURN//////////////////////////////
 		thunderCounter = 0;
+		for(int i = 0; i<3;i++){alreadyAttacked[i] = 0;}
 		
 	}
 	
