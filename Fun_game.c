@@ -229,6 +229,28 @@ void CardDetail(card cardShown){
 };
 
 
+int DirectAttack(int * ID, int * life, int * dmg, int * thunderCounter){
+	
+	int thunderBonus = 0;
+	
+	if(*thunderCounter >= 1 || *ID == 7){
+		
+		thunderBonus += 1;
+		
+		thunderBonus += 2* *thunderCounter;
+		
+		printf("Bonus foudre : %d degats !\n",thunderBonus);
+		
+		*dmg += thunderBonus;
+		
+	}
+	
+	*life -= *dmg;
+	
+	return *dmg;
+};
+
+
 
 void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 	
@@ -238,6 +260,9 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 	
 	int actionsP = 3;
 	int actionsA = 3;
+	
+	int lifeA = 30;
+	int lifeP = 30;
 	
 	element empty = {"Z",10,0,0,0,0,""};
 	entity Empty = {"z",0,0,0,0};
@@ -251,6 +276,14 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 	card handP[20] = {Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty};
 	card handA[20] = {Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty, Empty,empty,Empty,empty, Empty,empty};
 	
+	int dmg = 0;
+	int i = 0;
+	
+	
+	int thunderCounter = 0;
+	
+	
+	
 	
 	Draw(deckA,handA,cardsDrewA);
 	Draw(deckA,handA,cardsDrewA);
@@ -260,11 +293,11 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 	Draw(deckP,handP,cardsDrewP);
 	Draw(deckP,handP,cardsDrewP);
 	
-	int bGame = 0;
 	char sChoice[64];
 	int nChoice = 0;
+	int memo = 0;
 	
-	while (bGame == 0){
+	while (lifeA >= 0 && lifeP >= 0){
 		
 		clearScreen();
 		
@@ -276,6 +309,7 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 		strcpy(sChoice,"0");
 		actionsP = 3;
 		nChoice = 0;
+		thunderCounter = 0;
 		
 		while (strcmp(sChoice,"Attaquer") !=0){
 			
@@ -391,11 +425,108 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 		
 		
 		//////ATTACK PHASE////////
-		printf("\nAttaque-----------\n");
+		clearScreen();
+		printf("\n--------------Phase d'Attaque-----------\n");
+		
+		while(actionsP>0 && nChoice != 444){
+			
+			nChoice = 5;
+			
+			while(nChoice != 0 && nChoice != 1 && nChoice != 2 && nChoice != -1){
+			
+				printf("\n	Voici votre terrain, chaque creature peut attaquer une fois pour 1 point d'action (points d'actions restatnts : %d ): \n",actionsP);
+				
+				ShowField(fieldP);
+				
+				printf("\n	Tapez un numero de terrain pour attaquer avec la creature associee, tapez 0 pour terminer votre tour\n");
+				
+				scanf("%d",&nChoice);
+				nChoice -= 1;
+				memo = nChoice;
+				
+			}
+			
+			
+			if(nChoice == -1){
+				
+				nChoice = 444;
+				
+			}
+			else if(fieldP[nChoice].Element.ID == 10){
+				
+				printf("  Il n'y a aucune creature a l'endroit cible...\n");
+				
+			}
+			else if (fieldP[nChoice].Element.ID <= 9 && fieldP[nChoice].Element.ID >= 0){
+				
+				nChoice = 0;
+				
+				while(nChoice != 1 && nChoice != 2){
+					
+					printf("\n 1) Attaque normale : %d point(s) d'attaque\n 2) Attaque speciale : %d point(s) d'attaque speciale\n",fieldP[memo].Entity.Atk, fieldP[memo].Entity.AtkSpe);
+					
+					scanf("%d",&nChoice);
+					
+				}
+				
+				if((nChoice == 1 && fieldP[memo].Entity.Atk > 0) || (nChoice == 2 && fieldP[memo].Entity.AtkSpe > 0)){
+				
+					for(int i = 0; i<3; i++){
+						
+						if(fieldA[i].Element.ID != 10){
+							
+							i = 22;
+							
+						}
+						
+					}
+					
+					if(i == 22){
+						
+						printf("&&Attaque ciblee a coder\n");
+						
+					}
+					else{
+						
+						if(nChoice == 1){
+						
+							dmg = DirectAttack(&fieldP[memo].Element.ID, &lifeA, &fieldP[memo].Entity.Atk, 0);
+							
+							printf("   !Attaque directe!\n");
+							
+						}
+						else if (nChoice == 2){
+							
+							dmg = DirectAttack(&fieldP[memo].Element.ID, &lifeA, &fieldP[memo].Entity.AtkSpe, &thunderCounter);
+							
+							printf("   !Attaque speciale directe!\n");
+							
+						}
+						
+					}
+					
+					printf("	!Vous infligez %d degats!\n",dmg);
+					
+					actionsP -= 1;
+				
+				}
+				else{
+					
+					printf("Vous n'avez pas de points d'attaque dans la categorie demandee, vous ne pouvez pas attaquer...\n");
+					
+				}
+				
+			}
+			
+			
+		}
+		
+		//////EFFECTS PHASE/////////
 		
 		
 		
 		/////////////IA TURN//////////////////////////////
+		thunderCounter = 0;
 		
 	}
 	
@@ -411,12 +542,12 @@ int main(){
 	element eau = {"'Eau",0,-1,1,1,0,"Soigne 1PV par tour aux autres creatures sous votre controle",0};
 	element feu = {"e Feu",1,2,0,-1,0,"Inflige deux tours de brulure (-1PV par tour) pour toute attaque physique effectuee",0};
 	element air = {"'Air",2,-1,0,1,1,"Subit 1 degat magique de moins par attaque magique subie",0};
-	element terre = {"e Terre",3,0,-1,2,0,"Subit 1 dégat physique de moins par attaque physique subie",0};
+	element terre = {"e Terre",3,0,-1,2,0,"Subit 1 degat physique de moins par attaque physique subie",0};
 	
 	element fumee = {"e Fumee",4,0,1,1,-1,"Inflige 1 degat a tous les adversaires par tour",1};
 	element glace = {"e Glace",5,0,1,-1,1,"Reduit l'attaque de 1 point pendant 2 tours a celui qui subit une attaque de glace",1};
 	element nature = {"e Nature",6,-1,0,1,1,"Se soigne de 1PV par tour et reduit les degats subits de 1 a chaque attaque",1};
-	element foudre = {"e Foudre",7,0,2,0,-1,"Fait un degat magique de plus et un degat supplementaire pour chaque attaque foudre deja lancee ce tour",1};
+	element foudre = {"e Foudre",7,0,2,0,-1,"Fait un degat magique de plus et 2 degat supplementaire pour chaque attaque foudre deja lancee ce tour",1};
 	element lave = {"e Lave",8,1,0,1,-1,"Inflige un degat supplementaire de contre-attaque",1};
 	element sable = {"e Sable",9,0,-1,1,1,"Divise par deux les degats de contre-attaque recus",1};
 	
