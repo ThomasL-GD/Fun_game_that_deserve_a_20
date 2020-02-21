@@ -382,6 +382,8 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 	
 	// Chaque index passe a 1 si la creature qui correspond a l'index a deja attaqué
 	int alreadyAttacked[3] = {0,0,0};
+	int burnedA[3] = {0,0,0};
+	int burnedP[3] = {0,0,0};
 	
 	
 	int thunderCounter = 0;
@@ -648,6 +650,25 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 				printf("   + %s soigne toutes vos autres creatures +\n",fieldP[i].Entity.Name);
 				
 				WaterHeal(fieldP,i);
+				
+			}
+			
+			//Brulure feu
+			for(int j = 0; j<3; j++){
+				
+				if(burnedP[j] > 0){
+					
+					burnedP[j] -= 1;
+					
+					if(fieldP[j].Entity.Life > 0){
+					
+						printf("   !Votre %s souffre de sa brulure!", fieldP[j].Entity.Name);
+						
+						fieldP[j].Entity.Life -= 1;
+					
+					}
+					
+				}
 				
 			}
 			
