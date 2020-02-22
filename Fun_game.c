@@ -678,13 +678,23 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 			}
 		}
 
+		if(actionsP < 1){printf("vous n'avez plus de points d'actions, fin du tour obligatoire\n");};
+
+
+        //permet de debug
+        card fieldPtemps[3];
+		for (int i = 0; i <3; i ++){
+            fieldPtemps[i] = fieldP[i];
+		}
 
 		// tour de l'intelligence artificielle----------------------------------------------------
-		ArtificialIntelligence(deckA, handA, cardsDrewA, fieldP, fieldA, elementsList);
+		ArtificialIntelligence(deckA, handA, cardsDrewA, fieldP, fieldA, elementsList, fieldPtemps[i]);
         // ---------------------------------------------------------------------------------------
 
+        for (int i = 0; i <3; i ++){
+            fieldP[i] = fieldPtemps[i];
+		}
 
-		if(actionsP < 1){printf("vous n'avez plus de points d'actions, fin du tour obligatoire\n");}
 
 		//////EFFECTS PHASE/////////
 		printf("\n");
@@ -753,7 +763,7 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 };
 
 // deck de l'intelligence, ses cartes, ceux qu'il a tires, les cartes du terrain de l'adversaire, les cartes du terrain de l'intelligence, empty function, +elementlist(pour rentrer dans la fonction fusion)
-void ArtificialIntelligence(card deck[20], card hand[20], int cardsDrew[20], card fieldPlayer[3], card fieldAtrificialPlayer[3], element elementsList[10]){
+void ArtificialIntelligence(card deckAP[20], card handAP[20], int cardsDrewAP[20], card fieldPlayer[3], card fieldAtrificialPlayer[3], element elementsList[10], card fieldPtemps[3]){
 
     element empty = {"Z",10,0,0,0,0,""};
 	entity Empty = {"z",0,0,0,0};
@@ -761,32 +771,32 @@ void ArtificialIntelligence(card deck[20], card hand[20], int cardsDrew[20], car
 
     // ennemy turn
     //draw
-    Draw(deck,hand,cardsDrew);
-    int actions = 3;
+    Draw(deckAP,handAP,cardsDrewAP);
+    int actionsAP = 3;
     // si le board n'est pas rempli, l'ennemis pose une carte sur le terrain
     for (int i = 0; i<=3; i++){
-        if (fieldAtrificialPlayer[i].Element.ID == 10 && actions > 0){
-            fieldAtrificialPlayer[i] = hand[0];
-            hand[0] = EMPTY;
-            actions -=1;
+        if (fieldAtrificialPlayer[i].Element.ID == 10 && actionsAP > 0){
+            fieldAtrificialPlayer[i] = handAP[0];
+            handAP[0] = EMPTY;
+            actionsAP -=1;
             ShowField(fieldAtrificialPlayer);
             //tri des cartes en mains
-            sortingHand(hand);
+            sortingHand(handAP);
         //permet la fusion à  un point i
-        }else if (fieldAtrificialPlayer[i].Element.ID <= 3 && actions >= 2){
-            Fusion(fieldAtrificialPlayer,hand[i],i,elementsList);
-            hand[i] = EMPTY;
-            actions -=2;
+        }else if (fieldAtrificialPlayer[i].Element.ID <= 3 && actionsAP >= 2){
+            //Fusion(fieldAtrificialPlayer,handAP[i],i,elementsList);
+            handAP[i] = EMPTY;
+            actionsAP -=2;
         }
+        printf("////terrain du joueur////\n\n");
+        ShowField(fieldPlayer);
     };
-
 }
 
 void sortingHand(card hand[20]){
     element empty = {"Z",10,0,0,0,0,""};
 	entity Empty = {"z",0,0,0,0};
 	card EMPTY = {Empty,empty};
-
 
 
     int i = 20;
@@ -823,7 +833,7 @@ int main(){
 	element lave = {"e Lave",8,1,0,1,-1,"Inflige un degat supplementaire de contre-attaque",1};
 	element sable = {"e Sable",9,0,-1,1,1,"Divise par deux les degats de contre-attaque recus",1};
 
-	element elementsList[10] = {eau,feu,air,terre, fumee,glace,nature,foudre,lave,sable};
+	element elementsList[10] = {eau,feu,air,terre,fumee,glace,nature,foudre,lave,sable};
 
 	entity Loup = {"Loup d", 4,4,3,3};                                    //balance
 	entity CrabeRoyal = {"Crabe Royal d", 7, 4, 3, 2};                    //HP
