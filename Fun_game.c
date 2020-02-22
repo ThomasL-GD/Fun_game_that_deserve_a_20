@@ -674,12 +674,8 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 				else{
 
 					printf("Vous n'avez pas de points d'attaque dans la categorie demandee, vous ne pouvez pas attaquer...\n");
-
 				}
-
 			}
-
-
 		}
 
 
@@ -756,8 +752,12 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 
 };
 
-// deck de l'intelligence, ses cartes, ceux qu'il a tires, les cartes du terrain de l'adversaire, les cartes du terrain de l'intelligence
+// deck de l'intelligence, ses cartes, ceux qu'il a tires, les cartes du terrain de l'adversaire, les cartes du terrain de l'intelligence, empty function
 void ArtificialIntelligence(card deck[20], card hand[20], int cardsDrew[20], card fieldPlayer[3], card fieldAtrificialPlayer[3]){
+
+    element empty = {"Z",10,0,0,0,0,""};
+	entity Empty = {"z",0,0,0,0};
+	card EMPTY = {Empty,empty};
 
     // ennemy turn
     //draw
@@ -770,19 +770,13 @@ void ArtificialIntelligence(card deck[20], card hand[20], int cardsDrew[20], car
             hand[i] = EMPTY;
             actions -=1;
             //tri des cartes en mains
-            sortingHand(&hand);
-            }else if{
-
-
+            sortingHand(hand);
             }
-    }
-    for (int i = 1, i<=actionsA ,i++){
-        //attacker
-    }
+    };
 
 }
 
-void sortingHand(card* hand){
+void sortingHand(card hand[20]){
     for (int i = 0; i < 20; i++){
         for (int j = 0; j < 20; j++){
             if (hand[i].Element.ID > hand[j].Element.ID){
