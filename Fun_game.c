@@ -781,12 +781,14 @@ void sortingHand(card hand[20]){
         for (int j = 0; j < 20; j++){
             if (hand[i].Element.ID > hand[j].Element.ID){
 
-                card nTempo = hand[i].Element.ID;
+                card nTempo[1];
+                nTempo[1].Element.ID= hand[i].Element.ID;
                 hand[i].Element.ID = hand[j].Element.ID;
-                hand[j].Element.ID = nTempo;
+                hand[j].Element.ID = nTempo[i].Element.ID;
             }
         }
     }
+    ShowHand(hand);
 }
 
 
