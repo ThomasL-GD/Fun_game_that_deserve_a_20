@@ -680,7 +680,7 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 
 
 		// tour de l'intelligence artificielle----------------------------------------------------
-		ArtificialIntelligence(deckA, handA, cardsDrewA, fieldP, fieldA);
+		ArtificialIntelligence(deckA, handA, cardsDrewA, fieldP, fieldA, elementsList);
         // ---------------------------------------------------------------------------------------
 
 
@@ -752,8 +752,8 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 
 };
 
-// deck de l'intelligence, ses cartes, ceux qu'il a tires, les cartes du terrain de l'adversaire, les cartes du terrain de l'intelligence, empty function
-void ArtificialIntelligence(card deck[20], card hand[20], int cardsDrew[20], card fieldPlayer[3], card fieldAtrificialPlayer[3]){
+// deck de l'intelligence, ses cartes, ceux qu'il a tires, les cartes du terrain de l'adversaire, les cartes du terrain de l'intelligence, empty function, +elementlist(pour rentrer dans la fonction fusion)
+void ArtificialIntelligence(card deck[20], card hand[20], int cardsDrew[20], card fieldPlayer[3], card fieldAtrificialPlayer[3], element elementsList[10]){
 
     element empty = {"Z",10,0,0,0,0,""};
 	entity Empty = {"z",0,0,0,0};
@@ -767,26 +767,37 @@ void ArtificialIntelligence(card deck[20], card hand[20], int cardsDrew[20], car
     for (int i = 0; i<=3; i++){
         if (fieldAtrificialPlayer[i].Element.ID == 10 && actions > 0){
             fieldAtrificialPlayer[i] = hand[0];
-            hand[i] = EMPTY;
+            hand[0] = EMPTY;
             actions -=1;
+            ShowField(fieldAtrificialPlayer);
             //tri des cartes en mains
             sortingHand(hand);
-            }
+        //permet la fusion à  un point i
+        }else if (fieldAtrificialPlayer[i].Element.ID <= 3 && actions >= 2){
+            Fusion(fieldAtrificialPlayer,hand[i],i,elementsList);
+            hand[i] = EMPTY;
+            actions -=2;
+        }
     };
 
 }
 
 void sortingHand(card hand[20]){
-    for (int i = 0; i < 20; i++){
-        for (int j = 0; j < 20; j++){
-            if (hand[i].Element.ID > hand[j].Element.ID){
+    element empty = {"Z",10,0,0,0,0,""};
+	entity Empty = {"z",0,0,0,0};
+	card EMPTY = {Empty,empty};
 
-                card nTempo[1];
-                nTempo[1].Element.ID= hand[i].Element.ID;
-                hand[i].Element.ID = hand[j].Element.ID;
-                hand[j].Element.ID = nTempo[i].Element.ID;
-            }
+
+
+    int i = 20;
+    int boolean = 0;
+    while(boolean != 1){
+        if(hand[i].Element.ID != 10){
+            hand[0] = hand[i];
+            hand[i] = EMPTY;
+            boolean = 1;
         }
+        i += 1;
     }
     ShowHand(hand);
 }
