@@ -783,13 +783,13 @@ void ArtificialIntelligence(card deckAP[20], card handAP[20], int cardsDrewAP[20
             //tri des cartes en mains
             sortingHand(handAP);
         //permet la fusion à  un point i
-        }else if (fieldAtrificialPlayer[i].Element.ID <= 3 && actionsAP >= 2){
-            //Fusion(fieldAtrificialPlayer,handAP[i],i,elementsList);
-            handAP[i] = EMPTY;
+        }else if (fieldAtrificialPlayer[0].Element.ID <= 3 && actionsAP >= 2 && handAP[0].Element.ID != 10){
+            Fusion(fieldAtrificialPlayer,handAP[0],i,elementsList);
+            handAP[0] = EMPTY;
             actionsAP -=2;
+        }else if (fieldAtrificialPlayer[i].Element.ID != 10 && actionsAP > 0){
+
         }
-        printf("////terrain du joueur////\n\n");
-        ShowField(fieldPlayer);
     };
 }
 
