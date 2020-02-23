@@ -10,6 +10,8 @@ struct Entity{
 	int AtkSpe;
 	int Life;
 	int LifeSpe;
+	int Burned;
+	int Freezed;
 
 };
 typedef struct Entity entity;
@@ -179,7 +181,7 @@ void Fusion(card field[3], card fusionCard,int index,element elementsList[10]){
 	field[index].Entity.LifeSpe += fusionElement.ModifLifeSpe + fusionCard.Entity.LifeSpe;
 	if(field[index].Entity.LifeSpe < 0){field[index].Entity.LifeSpe = 0;}
 	field[index].Element = fusionElement;
-	
+
 	printf(" resulte de : %s !!!\n",field[index].Entity.Name);
 
 };
@@ -235,23 +237,23 @@ void CardDetail(card cardShown){
 };
 
 void VerifDeath(card field[3],int index, card EMPTY){
-	
+
 	if(field[index].Entity.LifeSpe <= 0 && field[index].Entity.Life <= 0){
-		
+
 		printf("\n     !!!%s est mort!!!\n",field[index].Entity.Name);
-		
+
 		field[index] = EMPTY;
-		
+
 	}
-	
+
 	if(field[index].Entity.LifeSpe < 0){
 		field[index].Entity.LifeSpe = 0;
 	}
-	
+
 	if(field[index].Entity.Life < 0){
 		field[index].Entity.Life = 0;
 	}
-	
+
 };
 
 
@@ -279,56 +281,52 @@ int DirectAttack(int * ID, int * life, int * dmg, int * thunderCounter){
 
 // Attaque ciblée param : terrain attaquant, terrain defenseur, index de la creature attaquante, index de la creature receveuse, un memo pour determiner si l'attaque est normale ou speciale
 int AimedAttack(card fieldA[3], card fieldD[3], int indexA, int indexD, int normSpe, card EMPTY){
-	
+
 	int dmg = 0;
 	int dmgContre = 0;
-	
+
 	//ATTAQUE
 	if(normSpe == 1){
 		dmg = fieldA[indexA].Entity.Atk;
 	}else if(normSpe == 2){
 		dmg = fieldA[indexA].Entity.AtkSpe;
 	}
-	
-	
+
+
 	if(normSpe == 1){
 		fieldD[indexD].Entity.Life -= dmg;
 	}else if(normSpe == 2){
 		fieldD[indexD].Entity.LifeSpe -= dmg;
 	}
-	
-	
+
+
 	//COUNTER - ATTACK
-	
+
 	if(normSpe == 1){
 		dmgContre = fieldD[indexD].Entity.Atk / 2;
 	}else if(normSpe == 2){
 		dmgContre = fieldD[indexD].Entity.AtkSpe / 2;
 	}
-	
+
 	if(normSpe == 1){
 		fieldA[indexA].Entity.Life -= dmgContre;
 	}else if(normSpe == 2){
 		fieldA[indexA].Entity.LifeSpe -= dmgContre;
 	}
-	
-	
+
+
 	VerifDeath(fieldD,indexD,EMPTY);
 	VerifDeath(fieldA,indexA,EMPTY);
-	
+
 	return dmg;
 };
 
 
-
-
-
-
 void sortingHand(card hand[20]){
     element empty = {"Z",10,0,0,0,0,""};
-	entity Empty = {"z",0,0,0,0};
+	entity Empty = {"z",0,0,0,0,0,0};
 	card EMPTY = {Empty,empty};
-	
+
 	if(hand[0].Element.ID == 10){
 		int i = 19;
 		int boolean = 0;
@@ -344,43 +342,6 @@ void sortingHand(card hand[20]){
 	}
 	ShowHand(hand);
 };
-
-// deck de l'intelligence, ses cartes, ceux qu'il a tires, les cartes du terrain de l'adversaire, les cartes du terrain de l'intelligence, empty function, +elementlist(pour rentrer dans la fonction fusion)
-void ArtificialIntelligence(card deckAP[20], card handAP[20], int cardsDrewAP[20], card fieldPlayer[3], card fieldAtrificialPlayer[3], element elementsList[10], card fieldPtemps[3]){
-
-	printf("IA is playing and bugging\n");
-
-    element empty = {"Z",10,0,0,0,0,""};
-	entity Empty = {"z",0,0,0,0};
-	card EMPTY = {Empty,empty};
-
-    // ennemy turn
-    //draw
-    Draw(deckAP,handAP,cardsDrewAP);
-    int actionsAP = 3;
-    // si le board n'est pas rempli, l'ennemis pose une carte sur le terrain
-    for (int i = 0; i<=3; i++){
-        if (fieldAtrificialPlayer[i].Element.ID == 10 && actionsAP > 0){
-            fieldAtrificialPlayer[i] = handAP[0];
-            handAP[0] = EMPTY;
-            actionsAP -=1;
-            ShowField(fieldAtrificialPlayer);
-            //tri des cartes en mains
-            sortingHand(handAP);
-        //permet la fusion à  un point i
-        }else if (fieldAtrificialPlayer[0].Element.ID <= 3 && actionsAP >= 2 && handAP[0].Element.ID != 10){
-            Fusion(fieldAtrificialPlayer,handAP[0],i,elementsList);
-            handAP[0] = EMPTY;
-            actionsAP -=2;
-			sortingHand(handAP);
-        }else if (fieldAtrificialPlayer[i].Element.ID != 10 && actionsAP > 0){
-
-        }
-    };
-};
-
-
-
 
 
 void SmokeDamage(card field[3]){
@@ -483,7 +444,7 @@ void NatureHeal(card field[3], int index){
 
 // 1=> combattant a qui c'ets le tour (francais douteux)  ///// 2 => opposant
 void EffectPhase(card field1[3], card field2[3], int burned1[3], int burned2[3]){
-	
+
 	for(int i = 0; i<3; i++){
 
 			//Soin passif eau
@@ -529,7 +490,7 @@ void EffectPhase(card field1[3], card field2[3], int burned1[3], int burned2[3])
 			}
 
 		}
-	
+
 };
 
 
@@ -550,7 +511,7 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 
 
 	element empty = {"Z",10,0,0,0,0,""};
-	entity Empty = {"z",0,0,0,0};
+	entity Empty = {"z",0,0,0,0,0,0};
 	card EMPTY = {Empty,empty};
 
 	// Les terrains des deux joueurs
@@ -746,14 +707,14 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 
 			}
 			else if(fieldP[nChoice].Element.ID == 10){
-				
+
 				printf("\n  Il n'y a aucune creature a l'endroit cible...\n");
-				
+
 			}
 			else if (alreadyAttacked[nChoice] == 1){
-				
+
 				printf("\n  Cette creature a deja attaque pour ce tour...\n");
-				
+
 			}
 			else if (fieldP[nChoice].Element.ID <= 9 && fieldP[nChoice].Element.ID >= 0){
 
@@ -766,50 +727,50 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 					printf("\n 1) Attaque normale : %d point(s) d'attaque\n 2) Attaque speciale : %d point(s) d'attaque speciale\n",fieldP[memo].Entity.Atk, fieldP[memo].Entity.AtkSpe);
 
 					scanf("%d",&nChoice);
-					
+
 					memoNormSpe = nChoice;
 
 				}
 
 				if((nChoice == 1 && fieldP[memo].Entity.Atk > 0) || (nChoice == 2 && fieldP[memo].Entity.AtkSpe > 0)){
-				
+
 					aim = 0;
-					
+
 					for(int i = 0; i<3; i++){
 
 						if(fieldA[i].Element.ID != 10){
-							
+
 							aim = 1;
-							
+
 						}
 
 					}
 
 					//Attaque ciblée
 					if(aim == 1){
-						
+
 						nChoice = 5;
-						
+
 						while(nChoice != 0 && nChoice != 1 && nChoice != 2 && nChoice != -1){
 
 							printf("\n Qui sera la cible de votre attaque ? (tapez le numero correspondant ou 0 pour annuler)\n");
-							
+
 							ShowField(fieldA);
-							
+
 							scanf("%d",&nChoice);
 							nChoice -= 1;
-						
+
 						}
-						
+
 						if(fieldA[nChoice].Element.ID != 10 && nChoice != -1){
-							
+
 							dmg = AimedAttack(fieldP,fieldA,memo,nChoice,memoNormSpe,EMPTY);
-							
+
 						}
 						else if (fieldA[nChoice].Element.ID == 10 && nChoice != -1){
-							
+
 							printf("	Il n'y a aucune creature a l'endroit cible...");
-							
+
 						}
 
 					}
@@ -822,7 +783,7 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 							dmg = DirectAttack(&fieldP[memo].Element.ID, &lifeA, &fieldP[memo].Entity.Atk, &none);
 
 							printf("	!Attaque directe!\n");
-							
+
 						}else if (memoNormSpe == 2){
 
 							dmg = DirectAttack(&fieldP[memo].Element.ID, &lifeA, &fieldP[memo].Entity.AtkSpe, &thunderCounter);
@@ -844,9 +805,9 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 				}
 			}
 		}
-		
+
 		if(actionsP < 1){printf("vous n'avez plus de points d'actions, fin du tour obligatoire\n");}
-		
+
 
         //permet de debug
         //card fieldPtemps[3];
@@ -873,36 +834,77 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 		/////////////IA TURN//////////////////////////////
 		thunderCounter = 0;
 		for(int i = 0; i<3;i++){alreadyAttacked[i] = 0;}
-		
-		
-		// ennemy turn
-		//draw
-		Draw(deckA,handA,cardsDrewA);
-		int actionsAP = 3;
-		// si le board n'est pas rempli, l'ennemis pose une carte sur le terrain
-		for (int i = 0; i<=3; i++){
-			if (fieldA[i].Element.ID == 10 && actionsA > 0 && handA[0].Element.ID != 10){
-				fieldA[i] = handA[0];
-				handA[0] = EMPTY;
-				actionsA -=1;
-				ShowField(fieldA);
-				//tri des cartes en mains
-				sortingHand(handA);
-			//permet la fusion à  un point i
-			}else if (fieldA[i].Element.ID <= 3 && actionsA >= 2 && handA[0].Element.ID != 10){
-				Fusion(fieldA,handA[0],i,elementsList);
-				handA[0] = EMPTY;
-				actionsA -=2;
-				sortingHand(handA);
-			}else if (fieldA[i].Element.ID != 10 && actionsA > 0){
 
-			}
+
+		// ennemy turn
+
+		Draw(deckA,handA,cardsDrewA);
+		actionsA = 3;
+
+
+
+		int NombreDeMonstre = 0; // compte le nombre de monstres sur le terrais de l'IA pour savoir si la fusion est possible
+
+		for (int i = 0; i<3; i++){
+            if (fieldA[i].Element.ID != 10){
+                NombreDeMonstre += 1;
+            }
 		}
 
+		int temps = 0; // S'occupera de savoir si le tour doit être recommencé ou non
 
 
-	}
+		for (int i = 0; i<3; i++){
 
+            // Permet de reinitialiser dans le cas où l'IA ne fait pas d'action
+            if (temps == i-1){
+                i = temps
+            }
+
+            int decision = rand()%3;
+
+            // Décision -> Attaque
+			if (decision == 0){
+                int tour = 0;  // Permet de compter le nombre de tour dans le cas où l'IA a deja le terrain plein
+                for (int j = 0; j<3; j++){
+
+                    if (fieldA[j].Element.ID == 10 && actionsA > 0 && handA[0].Element.ID != 10){
+                        fieldA[j] = handA[0];
+                        handA[0] = EMPTY;
+                        actionsA -=1;
+                        ShowField(fieldA);
+                        //tri des cartes en mains
+                        sortingHand(handA);
+                    }else{tour += 1;}
+
+                    if (tour == 3){
+                        temps = i;
+                    }
+                }
+
+			// Décision -> Fusion
+			}else if ( && NombreDeMonstre > 0){
+
+			    int fusionOk = 0;
+			    int random = rand()%3;
+                while (fusionOk != 1){
+
+                    if (fieldA[random].Element.ID <= 3 && actionsA >= 2){
+                        Fusion(fieldA,handA[0],random,elementsList);
+                        handA[0] = EMPTY;
+                        actionsA -=2;
+                        sortingHand(handA);
+                        fusionOk = 1;
+                    }
+                }
+            }else if(){
+
+            }else{
+                temps = i;
+            }
+
+        }
+    }
 };
 
 
@@ -925,28 +927,28 @@ int main(){
 	element foudre = {"e Foudre",7,0,2,0,-1,"Fait un degat magique de plus et 2 degat supplementaire pour chaque attaque foudre deja lancee ce tour",1};
 	element lave = {"e Lave",8,1,0,1,-1,"Inflige un degat supplementaire de contre-attaque",1};
 	element sable = {"e Sable",9,0,-1,1,1,"reduit la contre attaque recue a 1 point de degat max",1};
-	
-	element elementsList[10] = {eau,feu,air,terre, fumee,glace,nature,foudre,lave,sable};
-	
 
-	entity Loup = {"Loup d", 4,4,3,3};                                    //balance
-	entity CrabeRoyal = {"Crabe Royal d", 7, 4, 3, 2};                    //HP
-	entity DragonDeKomodo = {"Drakodo d", 4, 4, 6, 0};                    //attack + HP (phy + spe)
-	entity AraigneeCracheuse = {"Araignee Cracheuse d", 2, 4, 2, 6};      //attack spe
-	entity CrocodileAffame = {"Crocodile d", 5, 2, 5, 2};                 //attack + HP
-	entity ChefAlpaga = {"Chef Alpaga d", 5, 5, 2, 4};                    //HP (phy + spe) + attack spe
-	entity Grenouille = {"Crapaud d", 4, 7, 0, 3};                        //HP mag + attack spe
-    entity TortueSonore = {"Tortue Sonore d", 6, 2, 2, 6};                //HP + attack spe
-    entity BoucTemeraire = {"Bouc Temeraire d", 3, 3, 5, 5};              //attack (phy + spe)
-    entity Aigle = {"Aigle d", 3, 4, 6, 2};                               //attack
-    entity Elephant = {"Elephant d", 10, 0, 4, 0};                        //HP
-    entity Jaguar = {"Jaguar d", 2, 6, 6, 2};                             //HP spe + attack
-    entity SerpentCorosif = {"Serpent Corosif d", 0, 10, 0, 4};           //HP spe + attack spe
-    entity PlanteMarecageuse = {"Plante Marecargeuese d", 4, 4, 0, 6};    //attack spe
-    entity Scorpion = {"Scorpion d", 6, 2, 2, 4};                         //attack + attack spe
-    entity Phasme = {"Phasme d", 6, 6, 2, 2};                             // HP (phy + spe)
-    entity Buffle = {"Buffle d", 5, 2, 4, 2};                             //HP + attack
-    entity ManteReligieuse = {"Mante Religieuse d", 3, 4, 6, 2};          //attack
+	element elementsList[10] = {eau,feu,air,terre, fumee,glace,nature,foudre,lave,sable};
+
+
+	entity Loup = {"Loup d", 4,4,3,3,0,0};                                    //balance
+	entity CrabeRoyal = {"Crabe Royal d", 7, 4, 3, 2,0,0};                    //HP
+	entity DragonDeKomodo = {"Drakodo d", 4, 4, 6, 0,0,0};                    //attack + HP (phy + spe)
+	entity AraigneeCracheuse = {"Araignee Cracheuse d", 2, 4, 2, 6,0,0};      //attack spe
+	entity CrocodileAffame = {"Crocodile d", 5, 2, 5, 2,0,0};                 //attack + HP
+	entity ChefAlpaga = {"Chef Alpaga d", 5, 5, 2, 4,0,0};                    //HP (phy + spe) + attack spe
+	entity Grenouille = {"Crapaud d", 4, 7, 0, 3,0,0};                        //HP mag + attack spe
+    entity TortueSonore = {"Tortue Sonore d", 6, 2, 2, 6,0,0};                //HP + attack spe
+    entity BoucTemeraire = {"Bouc Temeraire d", 3, 3, 5, 5,0,0};              //attack (phy + spe)
+    entity Aigle = {"Aigle d", 3, 4, 6, 2,0,0};                               //attack
+    entity Elephant = {"Elephant d", 10, 0, 4, 0,0,0};                        //HP
+    entity Jaguar = {"Jaguar d", 2, 6, 6, 2,0,0};                             //HP spe + attack
+    entity SerpentCorosif = {"Serpent Corosif d", 0, 10, 0, 4,0,0};           //HP spe + attack spe
+    entity PlanteMarecageuse = {"Plante Marecargeuese d", 4, 4, 0, 6,0,0};    //attack spe
+    entity Scorpion = {"Scorpion d", 6, 2, 2, 4,0,0};                         //attack + attack spe
+    entity Phasme = {"Phasme d", 6, 6, 2, 2,0,0};                             // HP (phy + spe)
+    entity Buffle = {"Buffle d", 5, 2, 4, 2,0,0};                             //HP + attack
+    entity ManteReligieuse = {"Mante Religieuse d", 3, 4, 6, 2,0,0};          //attack
 
 
 
