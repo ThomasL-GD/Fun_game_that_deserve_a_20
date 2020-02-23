@@ -888,6 +888,23 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
                     printf("%d", fusionOk);
                 }
             }else if(decision == 2){
+                for(int i = 0; i < 3; i++){
+                    if (fieldA[i].Element.ID != 10){
+                        for (int j = 0; i < 3; i++){
+                            if (fieldP[j].Element.ID != 10){
+                                if (fieldP[j].Entity.Life <= fieldP[j].Entity.AtkSpe){
+                                    AimedAttack(fieldA[3], fieldP[3], fieldA[i].Element.ID, int indexD, int normSpe, card EMPTY){
+                                }else{
+
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+
+
 
             }
         }
