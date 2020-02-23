@@ -645,6 +645,7 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 			printf(" -Tapez un nom de carte pour la poser\n");
 			printf(" -Tapez \"Attaquer\" pour passer en phase d'attaque\n");
 			printf(" -Tapez \"Check\" pour regarder le terrain\n");
+			printf(" -Tapez \"Vie\" pour verifier les PVs de chaque joueur\n");
 
 			if(scanf(" %63[^\n]",sChoice)==1){};
 			printf("\n");
@@ -745,7 +746,13 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 				strcpy(sChoice,"");
 
 			}
-
+			
+			//Life check
+			if(strcmp(sChoice, "Vie") == 0){
+				printf("  Vous avez %d Pvs restants\n  Votre adversaire a %d PVs restants\n",lifeP,lifeA);
+				
+			}
+			
 		}
 
 
