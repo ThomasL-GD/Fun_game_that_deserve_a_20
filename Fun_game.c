@@ -953,6 +953,52 @@ void RandomDeck (card RandDeck[20], entity EntityNumb[18], element ElementNumb[4
 	}
 }
 
+void Explanations(element elementsList[10]){
+	clearScreen();
+	printf("	 	LES EXPLICATIONS DEMARRENT ICI!\n\n");
+	printf(" Bienvenue, ce jeu est un jeu de cartes basés sur les élements et leurs fusions.\n");
+	printf(" Chaque carte est associee a un element primitif Eau, Feu, Air et Terre\n");
+	printf(" De plus, chaque carte est representee par un animal, les noms de cartes ressemble donc à \"Loup de Feu\" par exmple\n");
+	printf(" Chaque element possede un effet qui lui est propre\n");
+	printf("\n");
+	printf(" Les cartes disposent de 4 statistiques :\n");
+	printf(" L'attaque : cela represente les degats que va faire la creature quand elle va attaquer et contre-attaquer\n");
+	printf(" L'attaque speciale : cela represente uassi les degats de la creature mais sur le plan special\n");
+	printf(" Les PVs : reprensentent la vie de votre creature, quand les deux types de PVs sont à 0, la creature meurt\n");
+	printf(" Les PVs speciaux : ils sont la deuxieme barre de vie d'une creature et ne baissent qu'en cas d'attaque speciale\n");
+	printf("\n");
+	printf(" Quand vous piochez une creature dans votre deck, elle va dans votre main\n");
+	printf(" Depuis votre main, vous pouvez depenser un des trois points d'actions que vous possedez par tour pour poser la creature sur votre terrain\n");
+	printf(" Attention, les points d'actions sont aussi necessaire pour attaquer, a vous de bien les utiliser pour optimiser vos coups!\n");
+	printf(" Une fois que votre creature est sur le terrain, elle peut attaquer soit normalement soit specialement une fois par tour pour un point d'action\n");
+	printf(" Si votre adversaire ne possede aucune creature sur son terrain, vous pouvez attaquer directement ses PVs\n");
+	printf(" Chaque joueur possede 40 PVs et si vous arrivez a amener les PVs de votre adversaire a 0 avant qu'il le fasse, vous remportez la victoire !\n");
+	printf("\n");
+	printf(" Par contre, si votre adversaire a des creatures sur son terrain, vous devez les attaquer avant d'ataquer directement votre adversaire\n");
+	printf(" Attention, quand vous attaquez une creature, vous subissez une contre attaque a la hauteur de la moitié de la valeur d'attaque de la cible (normale si votre attaque est normale et speciale si votre attaque est speciale)\n");
+	printf(" L'effet de contre attaque s'applique evidemment aussi quand votre opposant attaque une de vos creature\n");
+	printf("\n");
+	printf(" Si vous avez une creature deja invoquee et une autre en main, vous pouvez les fusionner pour deux points d'actions !\n");
+	printf(" Quand vous faites une fusion, une nouvelle creature apparait et les statistiques des deux materiels de la fusion s'additionnent ( un petit coefficient rentre aussi en jeu )\n");
+	printf(" De plus, quand deux elements differents sont fusionnes, cela cree un nouvel element avec un pouvoir unique !\n");
+	printf(" Neanmoins, on ne peut pas effectuer une fusion sur une creature qui a deja ete fusionnee...\n");
+	printf("\n\n\n");
+	printf("    LISTE DES POUVOIRS DES ELEMENTS :\n");
+	printf(" -Eau : %s\n",elementsList[0].Description);
+	printf(" -Feu : %s\n",elementsList[1].Description);
+	printf(" -Air : %s\n",elementsList[2].Description);
+	printf(" -Terre : %s\n",elementsList[3].Description);
+	printf("\n");
+	printf(" -Eau + Feu = Fumee : %s\n",elementsList[4].Description);
+	printf(" -Eau + Air = Glace : %s\n",elementsList[5].Description);
+	printf(" -Eau + Terre = Nature : %s\n",elementsList[6].Description);
+	printf(" -Feu + Air = Foudre : %s\n",elementsList[7].Description);
+	printf(" -Feu + Terre = Lave : %s\n",elementsList[8].Description);
+	printf(" -Air + Terre = Sable : %s\n",elementsList[9].Description);
+	printf("\n\n Tapez une chaine de caracteres quelconque pour quitter mais surtout pas \"Prout\" sinon cela va quitter le programme automatiquement et vous ne voulez pas que cela arrive...\n");
+	
+};
+
 int main(){
 
 	srand(time(NULL));
@@ -1032,14 +1078,41 @@ int main(){
 	RandomDeck(deckAlea, EntityNumber, ElementNumber);
 	printf("\n\n");
 	RandomDeck(deckAleaBis, EntityNumber, ElementNumber);
+	
+	clearScreen();
 
-
-
-
-
-
-	Fight (deckAlea,deckAleaBis,elementsList);
-
+	printf("		\\(^-^)/ BIENVENUE ! \\(^-^)/\n\n\n\n\n\n\n\n\n");
+	
+	int game = 0;
+	
+	while(game == 0){
+		
+		char sChoice[127];
+		
+		while(strcmp(sChoice,"Je comprends rien expliquez moi T_T") != 0 && strcmp(sChoice,"C'est parti pour jouer !") != 0 && strcmp(sChoice,"J'ai fini je veux quitter") != 0){
+			printf("	Tapez votre choix :\n");
+			printf("	 	-\"Je comprends rien expliquez moi T_T\" => Presentation du jeu et explications\n");
+			printf("	 	-\"C'est parti pour jouer !\" => aller faire une partie contre l'IA\n");
+			printf("	 	-\"J'ai fini je veux quitter\" => Quitter (Vous n'oseriez pas... T_T, vous savez ce qui va arriver T_T... Je vais beauuuuuucoup pleurer... T_T  T_T  T_T\n");
+			if(scanf(" %63[^\n]",sChoice)==1){};
+		}
+		
+		if (strcmp(sChoice,"Je comprends rien expliquez moi T_T") == 0){
+			Explanations(elementsList);
+			if(scanf(" %63[^\n]",sChoice)==1){};
+			if (strcmp(sChoice,"Prout") == 0){strcpy(sChoice,"J'ai fini je veux quitter");}
+			clearScreen();
+		}
+		
+		if (strcmp(sChoice,"C'est parti pour jouer !") == 0){
+			Fight (deckAlea,deckAleaBis,elementsList);
+		}
+		
+		if (strcmp(sChoice,"J'ai fini je veux quitter") == 0){
+			while(game == 0){printf("T_T WHYYYYYYYYYYY DID YOU QUIT THIS AWESOME GAME ?! T_T IT'S SO SAAAAD");}
+		}
+		
+	}
 
 	return 0;
 }
