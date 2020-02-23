@@ -851,21 +851,15 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
             }
 		}
 
-		int temps = 0; // S'occupera de savoir si le tour doit être recommencé ou non
+		while (actionsA != 0){
 
-
-		for (int i = 0; i<3; i++){
-
-            // Permet de reinitialiser dans le cas où l'IA ne fait pas d'action
-            if (temps == i-1){
-                i = temps
-            }
-
-            int decision = rand()%3;
+           int decision = rand()%3;
 
             // Décision -> Attaque
 			if (decision == 0){
-                int tour = 0;  // Permet de compter le nombre de tour dans le cas où l'IA a deja le terrain plein
+
+            printf("%d", decision);
+
                 for (int j = 0; j<3; j++){
 
                     if (fieldA[j].Element.ID == 10 && actionsA > 0 && handA[0].Element.ID != 10){
@@ -875,34 +869,27 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
                         ShowField(fieldA);
                         //tri des cartes en mains
                         sortingHand(handA);
-                    }else{tour += 1;}
-
-                    if (tour == 3){
-                        temps = i;
                     }
                 }
-
 			// Décision -> Fusion
-			}else if ( && NombreDeMonstre > 0){
+			}else if (decision == 1 && NombreDeMonstre > 0 && actionsA >= 2){
 
 			    int fusionOk = 0;
 			    int random = rand()%3;
                 while (fusionOk != 1){
 
-                    if (fieldA[random].Element.ID <= 3 && actionsA >= 2){
+                    if (fieldA[random].Element.ID <= 3){
                         Fusion(fieldA,handA[0],random,elementsList);
                         handA[0] = EMPTY;
                         actionsA -=2;
                         sortingHand(handA);
                         fusionOk = 1;
                     }
+                    printf("%d", fusionOk);
                 }
-            }else if(){
+            }else if(decision == 2){
 
-            }else{
-                temps = i;
             }
-
         }
     }
 };
