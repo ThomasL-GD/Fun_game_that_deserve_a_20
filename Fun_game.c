@@ -856,7 +856,7 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
            int decision = rand()%3;
 
             // Décision -> Attaque
-			if (decision == 0){
+			if (decision == 0 && NombreDeMonstre != 3){
 
             printf("%d", decision);
 
@@ -892,20 +892,43 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
                     if (fieldA[i].Element.ID != 10){
                         for (int j = 0; i < 3; i++){
                             if (fieldP[j].Element.ID != 10){
-                                if (fieldP[j].Entity.Life <= fieldP[j].Entity.AtkSpe){
-                                    AimedAttack(fieldA[3], fieldP[3], fieldA[i].Element.ID, int indexD, int normSpe, card EMPTY){
+                                int attaquenull = 0;
+                                int lifenull = 0;
+
+                                if (fieldP[j].Entity.AtkSpe == 0){
+                                    attaquenull = 1;
+                                }else if (fieldP[j].Entity.Atk == 0){
+                                    attaquenull = 2;
+                                }
+
+                                if (fieldP[j].Entity.Life == 0){
+                                    lifenull = 1;
+                                }else if (fieldP[j].Entity.LifeSpe == 0){
+                                    lifenull = 2;
+                                }
+
+
+
+                                if ((fieldP[j].Entity.Life <= fieldP[j].Entity.LifeSpe || attaquenull == 2)|| lifenull == 1){
+                                    int dmg = AimedAttack(fieldA, fieldP, i, j, 2, EMPTY);
+                                    printf("%s a attaque ton %s, s'est pris %d degats speciaux\n", fieldA[i].Entity.Name, fieldP[j].Entity.Name, dmg);
+
+                                }else if ((fieldP[j].Entity.Life > fieldP[j].Entity.LifeSpe || attaquenull == 1) || lifenull == 2){
+                                    AimedAttack(fieldA, fieldP, i, j, 1, EMPTY);
+                                    printf("%s a attaque ton %s, s'est pris %d degats\n", fieldA[i].Entity.Name, fieldP[j].Entity.Name, dmg);
+
                                 }else{
 
+                                    DirectAttack(&fieldA[i].Element.ID, &lifeP, &fieldA[i].Entity.Atk, &thunderCounter);
+                                    printf("%s vous a fait %d degats, vous n'avez plus que %d vies\n", fieldP[j].Entity.Name, dmg, lifeA);
                                 }
+
+
 
                             }
                         }
                     }
                 }
-
-
-
-
             }
         }
     }
