@@ -182,7 +182,8 @@ void Fusion(card field[3], card fusionCard,int index,element elementsList[10]){
 	if(field[index].Entity.LifeSpe < 0){field[index].Entity.LifeSpe = 0;}
 	field[index].Element = fusionElement;
 	field[index].Element.bFusion = 1;
-	
+
+
 	printf(" resulte de : %s !!!\n",field[index].Entity.Name);
 
 };
@@ -238,23 +239,23 @@ void CardDetail(card cardShown){
 };
 
 void VerifDeath(card field[3],int index, card EMPTY){
-	
+
 	if(field[index].Entity.LifeSpe <= 0 && field[index].Entity.Life <= 0){
-		
+
 		printf("\n     !!!%s est mort!!!\n",field[index].Entity.Name);
-		
+
 		field[index] = EMPTY;
-		
+
 	}
-	
+
 	if(field[index].Entity.LifeSpe < 0){
 		field[index].Entity.LifeSpe = 0;
 	}
-	
+
 	if(field[index].Entity.Life < 0){
 		field[index].Entity.Life = 0;
 	}
-	
+
 };
 
 
@@ -286,7 +287,7 @@ int AimedAttack(card fieldA[3], card fieldD[3], int indexA, int indexD, int norm
 	int dmg = 0;
 	int dmgContre = 0;
 	int thunderBonus = 0;
-	
+
 	//ATTAQUE
 	if(normSpe == 1){
 		dmg = fieldA[indexA].Entity.Atk;
@@ -334,16 +335,15 @@ int AimedAttack(card fieldA[3], card fieldD[3], int indexA, int indexD, int norm
 	}
 	
 	
-	
 	if(normSpe == 1){
 		fieldD[indexD].Entity.Life -= dmg;
 	}else if(normSpe == 2){
 		fieldD[indexD].Entity.LifeSpe -= dmg;
 	}
-	
-	
+
+
 	//COUNTER - ATTACK
-	
+
 	if(normSpe == 1){
 		dmgContre = fieldD[indexD].Entity.Atk / 2;
 	}else if(normSpe == 2){
@@ -372,20 +372,16 @@ int AimedAttack(card fieldA[3], card fieldD[3], int indexA, int indexD, int norm
 	
 	VerifDeath(fieldD,indexD,EMPTY);
 	VerifDeath(fieldA,indexA,EMPTY);
-	
+
 	return dmg;
 };
 
 
-
-
-
-
 void sortingHand(card hand[20]){
     element empty = {"Z",10,0,0,0,0,""};
-	entity Empty = {"z",0,0,0,0};
+	entity Empty = {"z",0,0,0,0,0,0};
 	card EMPTY = {Empty,empty};
-	
+
 	if(hand[0].Element.ID == 10){
 		int i = 19;
 		int boolean = 0;
@@ -503,7 +499,6 @@ void NatureHeal(card field[3], int index){
 
 // 1=> combattant a qui c'ets le tour (francais douteux)  ///// 2 => opposant
 void EffectPhase(card field1[3], card field2[3]){
-	
 	for(int i = 0; i<3; i++){
 
 			//Soin passif eau
@@ -561,7 +556,7 @@ void EffectPhase(card field1[3], card field2[3]){
 			}
 
 		}
-	
+
 };
 
 
@@ -784,14 +779,14 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 
 			}
 			else if(fieldP[nChoice].Element.ID == 10){
-				
+
 				printf("\n  Il n'y a aucune creature a l'endroit cible...\n");
-				
+
 			}
 			else if (alreadyAttacked[nChoice] == 1){
-				
+
 				printf("\n  Cette creature a deja attaque pour ce tour...\n");
-				
+
 			}
 			else if (fieldP[nChoice].Element.ID <= 9 && fieldP[nChoice].Element.ID >= 0){
 
@@ -804,50 +799,49 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 					printf("\n 1) Attaque normale : %d point(s) d'attaque\n 2) Attaque speciale : %d point(s) d'attaque speciale\n",fieldP[memo].Entity.Atk, fieldP[memo].Entity.AtkSpe);
 
 					scanf("%d",&nChoice);
-					
+
 					memoNormSpe = nChoice;
 
 				}
 
 				if((nChoice == 1 && fieldP[memo].Entity.Atk > 0) || (nChoice == 2 && fieldP[memo].Entity.AtkSpe > 0)){
-				
+
 					aim = 0;
-					
+
 					for(int i = 0; i<3; i++){
 
 						if(fieldA[i].Element.ID != 10){
-							
+
 							aim = 1;
-							
+
 						}
 
 					}
 
 					//Attaque ciblée
 					if(aim == 1){
-						
+
 						nChoice = 5;
-						
+
 						while(nChoice != 0 && nChoice != 1 && nChoice != 2 && nChoice != -1){
 
 							printf("\n Qui sera la cible de votre attaque ? (tapez le numero correspondant ou 0 pour annuler)\n");
-							
+
 							ShowField(fieldA);
-							
+
 							scanf("%d",&nChoice);
 							nChoice -= 1;
-						
+
 						}
-						
+
 						if(fieldA[nChoice].Element.ID != 10 && nChoice != -1){
 							
 							dmg = AimedAttack(fieldP,fieldA,memo,nChoice,memoNormSpe,EMPTY,&thunderCounter);
-							
 						}
 						else if (fieldA[nChoice].Element.ID == 10 && nChoice != -1){
-							
+
 							printf("	Il n'y a aucune creature a l'endroit cible...");
-							
+
 						}
 
 					}
@@ -860,7 +854,7 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 							dmg = DirectAttack(&fieldP[memo].Element.ID, &lifeA, &fieldP[memo].Entity.Atk, &none);
 
 							printf("	!Attaque directe!\n");
-							
+
 						}else if (memoNormSpe == 2){
 
 							dmg = DirectAttack(&fieldP[memo].Element.ID, &lifeA, &fieldP[memo].Entity.AtkSpe, &thunderCounter);
@@ -882,9 +876,9 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 				}
 			}
 		}
-		
+
 		if(actionsP < 1){printf("vous n'avez plus de points d'actions, fin du tour obligatoire\n");}
-		
+
 
 
 		//////EFFECTS PHASE/////////
@@ -897,36 +891,108 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 		/////////////IA TURN//////////////////////////////
 		thunderCounter = 0;
 		for(int i = 0; i<3;i++){alreadyAttacked[i] = 0;}
-		
-		
+
+
 		// ennemy turn
-		//draw
+
 		Draw(deckA,handA,cardsDrewA);
 		actionsA = 3;
-		// si le board n'est pas rempli, l'ennemis pose une carte sur le terrain
-		for (int i = 0; i<=3; i++){
-			if (fieldA[i].Element.ID == 10 && actionsA > 0 && handA[0].Element.ID != 10){
-				fieldA[i] = handA[0];
-				handA[0] = EMPTY;
-				actionsA -=1;
-				ShowField(fieldA);
-				//tri des cartes en mains
-				sortingHand(handA);
-			//permet la fusion à  un point i
-			}else if (fieldA[i].Element.ID <= 3 && actionsA >= 2 && handA[0].Element.ID != 10){
-				Fusion(fieldA,handA[0],i,elementsList);
-				handA[0] = EMPTY;
-				actionsA -=2;
-				sortingHand(handA);
-			}else if (fieldA[i].Element.ID != 10 && actionsA > 0){
+		int NombreDeMonstre = 0; // compte le nombre de monstres sur le terrais de l'IA pour savoir si la fusion est possible
+        int NombreDeMonsteFusion = 0;
+		for (int i = 0; i<3; i++){
+            if (fieldA[i].Element.ID != 10){
+                NombreDeMonstre += 1;
 
-			}
+                if(fieldA[i].Element.ID <= 3){
+                    NombreDeMonsteFusion += 1;
+                }
+            }
 		}
 
+        printf("NP MONSTRE FUSION %d ", NombreDeMonsteFusion);
+		while (actionsA > 1){
 
-	}
+           int decision = rand()%3;
+           printf("ICI LA DEISION/////\n%d\n", decision);
+           printf("L ACTION EST DE %d\n", actionsA);
+
+            // Décision -> Attaque
+			if (decision == 0 && NombreDeMonstre != 3){
+
+                for (int j = 0; j<3; j++){
+
+                    if (fieldA[j].Element.ID == 10 && actionsA > 0 && handA[0].Element.ID != 10){
+                        fieldA[j] = handA[0];
+                        handA[0] = EMPTY;
+                        actionsA -=1;
+                        ShowField(fieldA);
+                        //tri des cartes en mains
+                        sortingHand(handA);
+                    }
+                }
+			// Décision -> Fusion
+			}else if (decision == 1 && NombreDeMonsteFusion > 0 && actionsA >= 2){
+
+			    int fusionOk = 0;
+			    int random = rand()%3;
+                while (fusionOk != 1){
+
+                    if (fieldA[random].Element.ID <= 3 && fieldA[random].Element.ID != handA[0].Element.ID && handA[0].Element.ID != 10){
+                        Fusion(fieldA,handA[0],random,elementsList);
+                        handA[0] = EMPTY;
+                        actionsA -= 2;
+                        sortingHand(handA);
+                        fusionOk = 1;
+                    }
+                }
+            }else if(decision == 2 && actionsA > 0){
+                for(int i = 0; i < 3; i++){
+                    if (fieldA[i].Element.ID < 10){
+                        for (int j = 0; j < 3; j++){
+                            int attaque = 0;
+
+                            if (fieldP[j].Entity.AtkSpe >= fieldP[j].Entity.Atk)
+                                attaque = fieldA[i].Entity.AtkSpe;
+                            else
+                                attaque = fieldA[i].Entity.Atk;
 
 
+                            if (fieldP[j].Element.ID < 10){
+                                int attaquenull = 0;
+                                int lifenull = 0;
+
+                                if (fieldP[j].Entity.AtkSpe == 0)
+                                    attaquenull = 1;
+                                else if (fieldP[j].Entity.Atk == 0)
+                                    attaquenull = 2;
+
+                                if (fieldP[j].Entity.Life <= fieldP[j].Entity.LifeSpe || attaquenull == 2){
+                                    int dmg = AimedAttack(fieldA, fieldP, i, j, 2, EMPTY, &thunderCounter);
+                                    printf("%s a attaque ton %s, s'est pris %d degats speciaux\n", fieldA[i].Entity.Name, fieldP[j].Entity.Name, dmg);
+                                    actionsA -= 1;
+                                    break;
+
+                                }else if (fieldP[j].Entity.Life > fieldP[j].Entity.LifeSpe || attaquenull == 1){
+                                    AimedAttack(fieldA, fieldP, i, j, 1, EMPTY, &thunderCounter);
+                                    printf("%s a attaque ton %s, s'est pris %d degats\n", fieldA[i].Entity.Name, fieldP[j].Entity.Name, fieldA[i].Entity.Atk);
+                                    actionsA -=1;
+                                    break;
+                                }
+
+
+                            }else if (j == 2 && fieldA[i].Element.ID < 10){
+                                int dmg = DirectAttack(&fieldA[i].Element.ID, &lifeA, &attaque, &thunderCounter);
+                                printf("%s vous a fait %d degats, vous n'avez plus que %d vies\n", fieldA[i].Entity.Name, attaque, lifeA);
+                                actionsA -=1;
+                            }
+                        }
+                    }
+                    printf("%d", actionsA);
+                }
+            }
+
+        }
+    }
 };
 
 void RandomDeck (card RandDeck[20], entity EntityNumb[18], element ElementNumb[4]){
@@ -1049,6 +1115,7 @@ int main(){
     entity Phasme = {"Phasme d", 6, 6, 2, 2,0,0};                             // HP (phy + spe)
     entity Buffle = {"Buffle d", 5, 2, 4, 2,0,0};                             //HP + attack
     entity ManteReligieuse = {"Mante Religieuse d", 3, 4, 6, 2,0,0};          //attack
+
 
     entity EntityNumber[18]= {Loup, CrabeRoyal, DragonDeKomodo, AraigneeCracheuse, CrocodileAffame, ChefAlpaga, Grenouille, TortueSonore, BoucTemeraire, Aigle, Elephant, Jaguar, SerpentCorosif, PlanteMarecageuse, Scorpion, Phasme, Buffle, ManteReligieuse};
 	
