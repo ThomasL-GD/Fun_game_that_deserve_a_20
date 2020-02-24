@@ -924,8 +924,8 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 		}
 
 
-
 	}
+
 
 };
 
