@@ -973,14 +973,16 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
                                     attaquenull = 2;
 
                                 if (fieldP[j].Entity.Life <= fieldP[j].Entity.LifeSpe || attaquenull == 2){
+									printf("%s a attaque ton %s,", fieldA[i].Entity.Name, fieldP[j].Entity.Name);
                                     int dmg = AimedAttack(fieldA, fieldP, i, j, 2, EMPTY, &thunderCounter);
-                                    printf("%s a attaque ton %s, s'est pris %d degats speciaux\n", fieldA[i].Entity.Name, fieldP[j].Entity.Name, dmg);
+                                    printf(" s'est pris %d degats speciaux\n", dmg);
                                     actionsA -= 1;
                                     break;
 
                                 }else if (fieldP[j].Entity.Life > fieldP[j].Entity.LifeSpe || attaquenull == 1){
-                                    AimedAttack(fieldA, fieldP, i, j, 1, EMPTY, &thunderCounter);
-                                    printf("%s a attaque ton %s, s'est pris %d degats\n", fieldA[i].Entity.Name, fieldP[j].Entity.Name, fieldA[i].Entity.Atk);
+									printf("%s a attaque ton %s,", fieldA[i].Entity.Name, fieldP[j].Entity.Name);
+                                    int dmg = AimedAttack(fieldA, fieldP, i, j, 1, EMPTY, &thunderCounter);
+                                    printf(" s'est pris %d degats\n", dmg);
                                     actionsA -=1;
                                     break;
                                 }
