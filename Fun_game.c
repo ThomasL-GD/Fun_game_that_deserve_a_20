@@ -854,11 +854,12 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 		while (actionsA != 0){
 
            int decision = rand()%3;
+           printf("%d", decision);
 
             // Décision -> Attaque
 			if (decision == 0 && NombreDeMonstre != 3){
 
-            printf("%d", decision);
+            printf(" LACTION DE LIA EST%d\n", decision);
 
                 for (int j = 0; j<3; j++){
 
@@ -885,13 +886,12 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
                         sortingHand(handA);
                         fusionOk = 1;
                     }
-                    printf("%d", fusionOk);
                 }
             }else if(decision == 2){
                 for(int i = 0; i < 3; i++){
-                    if (fieldA[i].Element.ID != 10){
-                        for (int j = 0; i < 3; i++){
-                            if (fieldP[j].Element.ID != 10){
+                    if (fieldA[i].Element.ID < 10){
+                        for (int j = 0; j < 3; j++){
+                            if (fieldP[j].Element.ID < 10){
                                 int attaquenull = 0;
                                 int lifenull = 0;
 
@@ -901,30 +901,21 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
                                     attaquenull = 2;
                                 }
 
-                                if (fieldP[j].Entity.Life == 0){
-                                    lifenull = 1;
-                                }else if (fieldP[j].Entity.LifeSpe == 0){
-                                    lifenull = 2;
-                                }
-
-
-
-                                if ((fieldP[j].Entity.Life <= fieldP[j].Entity.LifeSpe || attaquenull == 2)|| lifenull == 1){
+                                if (fieldP[j].Entity.Life <= fieldP[j].Entity.LifeSpe || attaquenull == 2){
                                     int dmg = AimedAttack(fieldA, fieldP, i, j, 2, EMPTY);
                                     printf("%s a attaque ton %s, s'est pris %d degats speciaux\n", fieldA[i].Entity.Name, fieldP[j].Entity.Name, dmg);
+                                    actionsA -= 1;
 
-                                }else if ((fieldP[j].Entity.Life > fieldP[j].Entity.LifeSpe || attaquenull == 1) || lifenull == 2){
+                                }else if (fieldP[j].Entity.Life > fieldP[j].Entity.LifeSpe || attaquenull == 1){
                                     AimedAttack(fieldA, fieldP, i, j, 1, EMPTY);
                                     printf("%s a attaque ton %s, s'est pris %d degats\n", fieldA[i].Entity.Name, fieldP[j].Entity.Name, dmg);
+                                    actionsA -=1;
 
-                                }else{
-
-                                    DirectAttack(&fieldA[i].Element.ID, &lifeP, &fieldA[i].Entity.Atk, &thunderCounter);
-                                    printf("%s vous a fait %d degats, vous n'avez plus que %d vies\n", fieldP[j].Entity.Name, dmg, lifeA);
                                 }
-
-
-
+                            }else if (j == 2 && fieldA[j].Element.ID < 10){
+                                DirectAttack(&fieldA[j].Element.ID, &lifeP, &fieldA[j].Entity.Atk, &thunderCounter);
+                                printf("%s vous a fait %d degats, vous n'avez plus que %d vies\n", fieldP[j].Entity.Name, dmg, lifeA);
+                                actionsA -=1;
                             }
                         }
                     }
