@@ -294,12 +294,12 @@ int AimedAttack(card fieldA[3], card fieldD[3], int indexA, int indexD, int norm
 		
 		//burn feu
 		if(fieldA[indexA].Element.ID == 1){
-			printf("	!!%s brule la cible pour deux tours!!",fieldA[indexA].Entity.Name);
+			printf("	!!%s brule la cible pour deux tours!!\n",fieldA[indexA].Entity.Name);
 			fieldD[indexD].Entity.Burned = 2;
 		}
 		//resist air
 		if(fieldD[indexD].Element.ID == 3){
-			printf("	//%s resiste 1 degat normal//",fieldD[indexD].Entity.Name);
+			printf("	//%s resiste 1 degat normal//\n",fieldD[indexD].Entity.Name);
 			dmg -= 1;
 		}
 		
@@ -315,14 +315,14 @@ int AimedAttack(card fieldA[3], card fieldD[3], int indexA, int indexD, int norm
 		}
 		//rersist dirt
 		if(fieldD[indexD].Element.ID == 2){
-			printf("	//%s resiste 1 degat special//",fieldD[indexD].Entity.Name);
+			printf("	//%s resiste 1 degat special//\n",fieldD[indexD].Entity.Name);
 			dmg -= 1;
 		}
 	}
 	
 	//freeze ice
 	if(fieldA[indexA].Element.ID == 5){
-		printf("	!!%s gele la cible pour deux tours!!",fieldA[indexA].Entity.Name);
+		printf("	!!%s gele la cible pour deux tours!!\n",fieldA[indexA].Entity.Name);
 		fieldD[indexD].Entity.Freezed = 2;
 		fieldD[indexD].Entity.Atk -= 1;
 		fieldD[indexD].Entity.AtkSpe -= 1;
@@ -330,7 +330,7 @@ int AimedAttack(card fieldA[3], card fieldD[3], int indexA, int indexD, int norm
 	
 	//resist nature
 	if(fieldD[indexD].Element.ID == 6){
-		printf("	//%s resiste 1 degat normal//",fieldD[indexD].Entity.Name);
+		printf("	//%s resiste 1 degat normal//\n",fieldD[indexD].Entity.Name);
 		dmg -= 1;
 	}
 	
@@ -352,13 +352,13 @@ int AimedAttack(card fieldA[3], card fieldD[3], int indexA, int indexD, int norm
 	
 	//lava
 	if(fieldD[indexD].Element.ID == 8){
-		printf("	!!%s inflige 1 degat de contre-attaque supplementaire!!",fieldD[indexD].Entity.Name);
+		printf("	!!%s inflige 1 degat de contre-attaque supplementaire!!\n",fieldD[indexD].Entity.Name);
 		dmgContre += 1;
 	}
 	
 	//sand
 	if(fieldA[indexA].Element.ID == 9){
-		printf("	//%s ne peut prendre qu'1 degat de contre attaque max.//",fieldA[indexA].Entity.Name);
+		printf("	//%s ne peut prendre qu'1 degat de contre attaque max.//\n",fieldA[indexA].Entity.Name);
 		if(dmgContre > 1){dmgContre = 1;}else{dmgContre=0;}
 	}
 	
@@ -498,7 +498,7 @@ void NatureHeal(card field[3], int index){
 };
 
 // 1=> combattant a qui c'ets le tour (francais douteux)  ///// 2 => opposant
-void EffectPhase(card field1[3], card field2[3]){
+void EffectPhase(card field1[3], card field2[3],card EMPTY){
 	for(int i = 0; i<3; i++){
 
 			//Soin passif eau
@@ -517,9 +517,11 @@ void EffectPhase(card field1[3], card field2[3]){
 
 				if(field1[i].Entity.Life > 0){
 
-					printf("   !Votre %s souffre de sa brulure!", field1[i].Entity.Name);
+					printf("   !Votre %s souffre de sa brulure!\n", field1[i].Entity.Name);
 
 					field1[i].Entity.Life -= 1;
+					
+					VerifDeath(field1,i,EMPTY);
 
 				}
 
@@ -531,6 +533,10 @@ void EffectPhase(card field1[3], card field2[3]){
 				printf("   ! %s inflige des degats a toutes les creatures adverses !\n",field1[i].Entity.Name);
 
 				SmokeDamage(field2);
+				
+				for(int j = 0; j < 3; j++){
+					VerifDeath(field2,j,EMPTY);
+				}
 
 			}
 
@@ -884,7 +890,7 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 		//////EFFECTS PHASE/////////
 		printf("\n");
 
-		EffectPhase(fieldP, fieldA);
+		EffectPhase(fieldP, fieldA, EMPTY);
 
 
 
@@ -992,6 +998,8 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
             }
 
         }
+		
+		EffectPhase(fieldA, fieldP, EMPTY);
     }
 };
 
