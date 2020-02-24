@@ -259,7 +259,7 @@ void VerifDeath(card field[3],int index, card EMPTY){
 };
 
 
-int DirectAttack(int * ID, int * life, int * dmg, int * thunderCounter){
+int DirectAttack(int * ID, int * life, int dmg, int * thunderCounter){
 
 	int thunderBonus = 0;
 
@@ -271,13 +271,13 @@ int DirectAttack(int * ID, int * life, int * dmg, int * thunderCounter){
 
 		printf("	!Bonus foudre : %d degats !\n",thunderBonus);
 
-		*dmg += thunderBonus;
+		dmg += thunderBonus;
 
 	}
 
-	*life -= *dmg;
+	*life -= dmg;
 
-	return *dmg;
+	return dmg;
 };
 
 
@@ -851,13 +851,13 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 
 							int none = 0;
 
-							dmg = DirectAttack(&fieldP[memo].Element.ID, &lifeA, &fieldP[memo].Entity.Atk, &none);
+							dmg = DirectAttack(&fieldP[memo].Element.ID, &lifeA, fieldP[memo].Entity.Atk, &none);
 
 							printf("	!Attaque directe!\n");
 
 						}else if (memoNormSpe == 2){
 
-							dmg = DirectAttack(&fieldP[memo].Element.ID, &lifeA, &fieldP[memo].Entity.AtkSpe, &thunderCounter);
+							dmg = DirectAttack(&fieldP[memo].Element.ID, &lifeA, fieldP[memo].Entity.AtkSpe, &thunderCounter);
 
 							printf("	!Attaque speciale directe!\n");
 
@@ -981,7 +981,7 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 
 
                             }else if (j == 2 && fieldA[i].Element.ID < 10){
-                                int dmg = DirectAttack(&fieldA[i].Element.ID, &lifeA, &attaque, &thunderCounter);
+                                int dmg = DirectAttack(&fieldA[i].Element.ID, &lifeA, attaque, &thunderCounter);
                                 printf("%s vous a fait %d degats, vous n'avez plus que %d vies\n", fieldA[i].Entity.Name, attaque, lifeA);
                                 actionsA -=1;
                             }
