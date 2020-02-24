@@ -849,13 +849,14 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
             if (fieldA[i].Element.ID != 10){
                 NombreDeMonstre += 1;
 
-                if(fieldA[i].Element.ID > 3){
-                    NombreDeMonsteFusion;
+                if(fieldA[i].Element.ID <= 3){
+                    NombreDeMonsteFusion += 1;
                 }
             }
 		}
 
-		while (actionsA >= 0){
+        printf("NP MONSTRE FUSION %d ", NombreDeMonsteFusion);
+		while (actionsA > 1){
 
            int decision = rand()%3;
            printf("ICI LA DEISION/////\n%d\n", decision);
@@ -885,12 +886,12 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
                     if (fieldA[random].Element.ID <= 3){
                         Fusion(fieldA,handA[0],random,elementsList);
                         handA[0] = EMPTY;
-                        actionsA -=2;
+                        actionsA -= 2;
                         sortingHand(handA);
                         fusionOk = 1;
                     }
                 }
-            }else if(decision == 2){
+            }else if(decision == 2 && actionsA > 0){
                 for(int i = 0; i < 3; i++){
                     if (fieldA[i].Element.ID < 10){
                         for (int j = 0; j < 3; j++){
@@ -915,11 +916,13 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
                                     int dmg = AimedAttack(fieldA, fieldP, i, j, 2, EMPTY);
                                     printf("%s a attaque ton %s, s'est pris %d degats speciaux\n", fieldA[i].Entity.Name, fieldP[j].Entity.Name, dmg);
                                     actionsA -= 1;
+                                    break;
 
                                 }else if (fieldP[j].Entity.Life > fieldP[j].Entity.LifeSpe || attaquenull == 1){
                                     AimedAttack(fieldA, fieldP, i, j, 1, EMPTY);
-                                    printf("%s a attaque ton %s, s'est pris %d degats\n", fieldA[i].Entity.Name, fieldP[j].Entity.Name, dmg);
+                                    printf("%s a attaque ton %s, s'est pris %d degats\n", fieldA[i].Entity.Name, fieldP[j].Entity.Name, fieldA[i].Entity.Atk);
                                     actionsA -=1;
+                                    break;
                                 }
 
 
@@ -933,6 +936,7 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
                     printf("%d", actionsA);
                 }
             }
+
         }
     }
 };
