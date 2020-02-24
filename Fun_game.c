@@ -844,22 +844,25 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
 
 
 		int NombreDeMonstre = 0; // compte le nombre de monstres sur le terrais de l'IA pour savoir si la fusion est possible
-
+        int NombreDeMonsteFusion = 0;
 		for (int i = 0; i<3; i++){
             if (fieldA[i].Element.ID != 10){
                 NombreDeMonstre += 1;
+
+                if(fieldA[i].Element.ID > 3){
+                    NombreDeMonsteFusion;
+                }
             }
 		}
 
-		while (actionsA != 0){
+		while (actionsA >= 0){
 
            int decision = rand()%3;
-           printf("%d", decision);
+           printf("ICI LA DEISION/////\n%d\n", decision);
+           printf("L ACTION EST DE %d\n", actionsA);
 
             // Décision -> Attaque
 			if (decision == 0 && NombreDeMonstre != 3){
-
-            printf(" LACTION DE LIA EST%d\n", decision);
 
                 for (int j = 0; j<3; j++){
 
@@ -873,7 +876,7 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
                     }
                 }
 			// Décision -> Fusion
-			}else if (decision == 1 && NombreDeMonstre > 0 && actionsA >= 2){
+			}else if (decision == 1 && NombreDeMonsteFusion > 0 && actionsA >= 2){
 
 			    int fusionOk = 0;
 			    int random = rand()%3;
@@ -891,15 +894,22 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
                 for(int i = 0; i < 3; i++){
                     if (fieldA[i].Element.ID < 10){
                         for (int j = 0; j < 3; j++){
+                            int attaque = 0;
+
+                            if (fieldP[j].Entity.AtkSpe >= fieldP[j].Entity.Atk)
+                                attaque = fieldA[i].Entity.AtkSpe;
+                            else
+                                attaque = fieldA[i].Entity.Atk;
+
+
                             if (fieldP[j].Element.ID < 10){
                                 int attaquenull = 0;
                                 int lifenull = 0;
 
-                                if (fieldP[j].Entity.AtkSpe == 0){
+                                if (fieldP[j].Entity.AtkSpe == 0)
                                     attaquenull = 1;
-                                }else if (fieldP[j].Entity.Atk == 0){
+                                else if (fieldP[j].Entity.Atk == 0)
                                     attaquenull = 2;
-                                }
 
                                 if (fieldP[j].Entity.Life <= fieldP[j].Entity.LifeSpe || attaquenull == 2){
                                     int dmg = AimedAttack(fieldA, fieldP, i, j, 2, EMPTY);
@@ -910,15 +920,17 @@ void Fight (card deckP[20], card deckA[20], element elementsList[10]){
                                     AimedAttack(fieldA, fieldP, i, j, 1, EMPTY);
                                     printf("%s a attaque ton %s, s'est pris %d degats\n", fieldA[i].Entity.Name, fieldP[j].Entity.Name, dmg);
                                     actionsA -=1;
-
                                 }
-                            }else if (j == 2 && fieldA[j].Element.ID < 10){
-                                DirectAttack(&fieldA[j].Element.ID, &lifeP, &fieldA[j].Entity.Atk, &thunderCounter);
-                                printf("%s vous a fait %d degats, vous n'avez plus que %d vies\n", fieldP[j].Entity.Name, dmg, lifeA);
+
+
+                            }else if (j == 2 && fieldA[i].Element.ID < 10){
+                                int dmg = DirectAttack(&fieldA[i].Element.ID, &lifeA, &attaque, &thunderCounter);
+                                printf("%s vous a fait %d degats, vous n'avez plus que %d vies\n", fieldA[i].Entity.Name, attaque, lifeA);
                                 actionsA -=1;
                             }
                         }
                     }
+                    printf("%d", actionsA);
                 }
             }
         }
